@@ -18,7 +18,7 @@ void Mesh::setProjectionMatrix(const GLsizei& width,const GLsizei& height){
     Camera*mCamera = (Camera*) mAccessorys[CAMERA_ACCESSORY];
     if(mCamera){
 
-        mCamera->setProjection(60.0f,mRatio,3.0,7.0f);
+        mCamera->setProjection(60.0f,mRatio,3.0,1000.0f);
     }
 }
 void Mesh::onSurfaceChanaged(const GLsizei& width,const GLsizei& height){

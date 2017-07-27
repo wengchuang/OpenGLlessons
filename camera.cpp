@@ -6,7 +6,7 @@ Camera::Camera(){
     this->up = glm::vec3(0.0f,1.0f,0.0f);
     setProjection(60.0f,
                   ((float)4.0/3),
-                   3.f,7.0f);
+                   3.f,1000.0f);
 }
 void Camera::setProjection(const float& fovAngle,
                    const float& aspect,const float& zNear,const float& zFar){

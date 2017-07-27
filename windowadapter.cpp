@@ -2,6 +2,7 @@
 #include "trianglerender.h"
 #include "pyramidrender.h"
 #include "baserender.h"
+#include "prismrender.h"
 #include "mesh.h"
 #include <QDebug>
 static Mesh* cusMesh = NULL;
@@ -73,7 +74,7 @@ static int cusAdapterInit(){
     mCamera = new Camera;
     mShader->shaderInit();
 
-    mRender = new TriangleRender;
+    mRender = new PrismRender;
 
     cusMesh = new Mesh(mRender,
                        mShader,
