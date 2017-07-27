@@ -3,17 +3,15 @@
 #include <GL/glew.h>
 #include <QVector>
 #include <glm/glm.hpp>
-#include "mesh.h"
-class PyramidMesh:public Mesh
+#include "baserender.h"
+class PyramidRender:public BaseRender
 {
 public:
-    PyramidMesh();
-protected:
+    PyramidRender();
     virtual void onRender();
-    virtual void onResize(const GLsizei &width, const GLsizei &height);
+    virtual void onSurfaceChanaged(const GLsizei &width, const GLsizei &height);
 private:
     GLuint   mRadius;
-
     static const     GLuint POINTCNT = 15 ;
     GLfloat   mPoints[3*(POINTCNT+1)];
 };

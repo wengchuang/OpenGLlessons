@@ -16,8 +16,10 @@ int WindowSystem::windowInit(const int& width,const int&height){
 }
 void WindowSystem::setWindowCallBacks(WindowEventCallBacks* callbacks){
     this->callBacks = callbacks;
-    if(callbacks->onDisplay)
+    if(callbacks->onDisplay){
         glutDisplayFunc(callbacks->onDisplay);
+        callbacks->onDisplay();
+    }
     if(callbacks->onResize)
         glutReshapeFunc(callbacks->onResize);
     if(callbacks->onKeyEvent)

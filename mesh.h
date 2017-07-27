@@ -5,14 +5,18 @@
 #include <QDebug>
 #include "shader.h"
 #include "camera.h"
+#include "baserender.h"
 
 class Mesh
 {
 public:
-    Mesh();
+    Mesh(BaseRender* render = NULL);
     void onDraw();
     int initData();
     void onSurfaceChanaged(const GLsizei& width,const GLsizei& height);
+    inline void setRender(BaseRender* render){
+        this->mRender = render;
+    }
     inline void update(){
         onDraw();
     }
@@ -46,43 +50,15 @@ public:
     }
     virtual ~Mesh();
 protected:
-    enum VERTBUFFERTYPE{
-        POSITION_VB,
-        NUM_BUFFERS
-    };
-protected:
-    virtual void onRender()=0;
-    virtual int  onInitData(){return 0;}
-    virtual void onResize(const GLsizei& width,const GLsizei& height){
-        Q_UNUSED(width);
-        Q_UNUSED(height);
-        return;
-    }
     inline float getRatio(){return mRatio;}
-    inline const GLuint& getVertArrObj(){
-        if(mVertArrObj == 0){
-            glGenVertexArrays(1,&mVertArrObj);
-        }
-        return mVertArrObj;
-    }
-    inline const GLuint& getVertArrBuffer(VERTBUFFERTYPE type){
-        if(mVertArrBuffers[0] == 0){
-            glGenBuffers(NUM_BUFFERS,mVertArrBuffers);
-        }
-        return mVertArrBuffers[type];
-    }
 private:
     void setProjectionMatrix(const GLsizei& width,const GLsizei& height);
-
-
 private:
     float  mRatio;
-    GLuint mVertArrObj;
-    GLuint mVertArrBuffers[NUM_BUFFERS];
     Shader* shader;
     Camera* camera;
     Transform *mTransform;
-
+    BaseRender* mRender;
 
 };
 

@@ -1,22 +1,14 @@
-#include "trianglemesh.h"
+#include "trianglerender.h"
 #include <QDebug>
-GLfloat vertices[] = {
-    -1.0f,-1.0f,2.0f,
-    1.0f,-1.0f,2.0f,
-    0.0f,1.0f,2.0f,
-};
-TriangleMesh::TriangleMesh()
+TriangleRender::TriangleRender()
 {
-    memcpy(mVertices,vertices,sizeof(mVertices));
 }
-void TriangleMesh::onResize(const GLsizei &width, const GLsizei &height)
+void TriangleRender::onSurfaceChanaged(const GLsizei &width, const GLsizei &height)
 {
-    Q_UNUSED(width);
-    Q_UNUSED(height);
-    const GLuint&  VBO = getVertArrBuffer(Mesh::POSITION_VB);
+    const GLuint&  VBO = getVertArrBuffer(BaseRender::POSITION_VB);
     const GLuint&  VAO = getVertArrObj();
-#if 0
-    GLfloat value = getRatio();
+
+    GLfloat value = (float)width/height;
     GLfloat mYValue = 1.0f;
 
     mVertices[0] = -value;
@@ -31,11 +23,6 @@ void TriangleMesh::onResize(const GLsizei &width, const GLsizei &height)
     mVertices[6] = 0.0;
     mVertices[7] = mYValue;
     mVertices[8] = 2.0;
-#endif
-
-
-
-
 
     glBindVertexArray(VAO);
 
@@ -48,7 +35,7 @@ void TriangleMesh::onResize(const GLsizei &width, const GLsizei &height)
     glBindBuffer(GL_ARRAY_BUFFER,0);
     glBindVertexArray(0);
 }
-void TriangleMesh::onRender(){
+void TriangleRender::onRender(){
     glBindVertexArray(getVertArrObj());
     glDrawArrays(GL_TRIANGLES,0,3);
     glBindVertexArray(0);

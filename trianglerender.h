@@ -1,15 +1,14 @@
 #ifndef TRIANGLEMESH_H
 #define TRIANGLEMESH_H
-#include "mesh.h"
+#include "baserender.h"
 #include <QDebug>
 
-class TriangleMesh : public Mesh
+class TriangleRender : public BaseRender
 {
 public:
-    TriangleMesh();
-protected:
+    TriangleRender();
     virtual void onRender();
-    virtual void onResize(const GLsizei &width, const GLsizei &height);
+    virtual void onSurfaceChanaged(const GLsizei &width, const GLsizei &height);
 private:
     GLfloat mVertices[9];
 

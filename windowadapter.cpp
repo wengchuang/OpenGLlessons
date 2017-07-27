@@ -1,9 +1,11 @@
 #include "windowadapter.h"
+#include "trianglerender.h"
+#include "pyramidrender.h"
+#include "baserender.h"
 #include "mesh.h"
-#include "trianglemesh.h"
-#include "pyramidmesh.h"
 #include <QDebug>
 static Mesh* cusMesh = NULL;
+static BaseRender* mRender = NULL;
 
 static void display(void){
     if(cusMesh){
@@ -63,11 +65,14 @@ struct WindowEventCallBacks* getCusWindowEventCallBacks(void){
 }
 
 static int cusAdapterInit(){
-    cusMesh = new PyramidMesh;
+    cusMesh = new Mesh;
+    mRender = new TriangleRender;
+    cusMesh->setRender(mRender);
     return cusMesh->initData();
 }
 static int cusAdapterUninit(){
     delete cusMesh;
+    delete mRender;
     return 0;
 }
 

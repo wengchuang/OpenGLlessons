@@ -1,15 +1,15 @@
-#include "pyramidmesh.h"
+#include "pyramidrender.h"
+#include <QDebug>
 #define PI (3.1415926f)
 
-PyramidMesh::PyramidMesh()
+PyramidRender::PyramidRender()
 {
     mRadius = 3;
-
     mPoints[0] = 0.0f;
     mPoints[1] = 0.0f;
     mPoints[2] = 2.0f;
 }
-void PyramidMesh::onRender()
+void PyramidRender::onRender()
 {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glBindVertexArray(getVertArrObj());
@@ -17,10 +17,9 @@ void PyramidMesh::onRender()
     glBindVertexArray(0);
 
 }
-void PyramidMesh::onResize(const GLsizei &width, const GLsizei &height){
-    Q_UNUSED(height);
-    Q_UNUSED(width);
-    mRadius = getRatio();
+void PyramidRender::onSurfaceChanaged(const GLsizei &width, const GLsizei &height){
+
+    mRadius = (float) width/height;
 
 
     GLfloat spec = (GLfloat)2*PI/(GLfloat)(POINTCNT-1);
@@ -34,7 +33,7 @@ void PyramidMesh::onResize(const GLsizei &width, const GLsizei &height){
     mPoints[3*POINTCNT]= mPoints[3];
     mPoints[3*POINTCNT+1]=  mPoints[4];
     mPoints[3*POINTCNT+2]=  mPoints[5];
-    const GLuint&  VBO = getVertArrBuffer(Mesh::POSITION_VB);
+    const GLuint&  VBO = getVertArrBuffer(BaseRender::POSITION_VB);
     const GLuint&  VAO = getVertArrObj();
 
     glBindVertexArray(VAO);
