@@ -2,7 +2,8 @@
 #define BASERENDER_H
 #include <GL/glew.h>
 #include <QtGlobal>
-class BaseRender
+#include "meshaccessory.h"
+class BaseRender:public MeshAccessory
 {
 public:
     BaseRender();

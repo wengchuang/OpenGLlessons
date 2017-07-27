@@ -19,8 +19,7 @@ void PyramidRender::onRender()
 }
 void PyramidRender::onSurfaceChanaged(const GLsizei &width, const GLsizei &height){
 
-    mRadius = (float) width/height;
-
+    mRadius = (float) width/height*2;
 
     GLfloat spec = (GLfloat)2*PI/(GLfloat)(POINTCNT-1);
 

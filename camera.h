@@ -2,7 +2,8 @@
 #define CAMERA_H
 #include <glm/gtx/transform.hpp>
 #include <glm/glm.hpp>
-class Camera
+#include "meshaccessory.h"
+class Camera:public MeshAccessory
 {
 public:
     Camera();

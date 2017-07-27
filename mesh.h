@@ -5,49 +5,94 @@
 #include <QDebug>
 #include "shader.h"
 #include "camera.h"
+#include "transform.h"
 #include "baserender.h"
+
+class MeshAccessory;
+
 
 class Mesh
 {
 public:
-    Mesh(BaseRender* render = NULL);
-    void onDraw();
-    int initData();
+    enum AccessoryType{
+        SHADER_ACCESSORY,
+        CAMERA_ACCESSORY,
+        TRANSFORM_ACCESSORY,
+        RENDER_ACCESSORY,
+        NUM_ACCESSORYS
+    };
+
+    Mesh(BaseRender* render = NULL,
+         Shader*shader = NULL,
+         Camera*camera = NULL,
+         Transform *mTransform = NULL);
+    void update();
     void onSurfaceChanaged(const GLsizei& width,const GLsizei& height);
-    inline void setRender(BaseRender* render){
-        this->mRender = render;
-    }
-    inline void update(){
-        onDraw();
-    }
+
     inline void roteXf(const GLfloat& angle){
-        mTransform->setRote(*mTransform->getRote()+glm::vec3(angle,0,0));
+        Transform *mTransform = (Transform *)mAccessorys[TRANSFORM_ACCESSORY];
+        if(mTransform)
+            mTransform->setRote(*mTransform->getRote()+glm::vec3(angle,0,0));
     }
     inline void roteYf(const GLfloat& angle){
-        mTransform->setRote(*mTransform->getRote()+glm::vec3(0,angle,0));
+        Transform *mTransform = (Transform *)mAccessorys[TRANSFORM_ACCESSORY];
+        if(mTransform){
+            mTransform->setRote(*mTransform->getRote()+glm::vec3(0,angle,0));
+        }
     }
     inline void roteZf(const GLfloat& angle){
-         mTransform->setRote(*mTransform->getRote()+glm::vec3(0,0,angle));
+        Transform *mTransform = (Transform *)mAccessorys[TRANSFORM_ACCESSORY];
+        if(mTransform){
+            mTransform->setRote(*mTransform->getRote()+glm::vec3(0,0,angle));
+        }
     }
 
     inline void transXf(const GLfloat& value){
-        mTransform->setPos(*mTransform->getPos()+glm::vec3(value,0,0));
+        Transform *mTransform = (Transform *)mAccessorys[TRANSFORM_ACCESSORY];
+        if(mTransform){
+            mTransform->setPos(*mTransform->getPos()+glm::vec3(value,0,0));
+        }
     }
     inline void transYf(const GLfloat& value){
-        mTransform->setPos(*mTransform->getPos()+glm::vec3(0,value,0));
+        Transform *mTransform = (Transform *)mAccessorys[TRANSFORM_ACCESSORY];
+        if(mTransform){
+            mTransform->setPos(*mTransform->getPos()+glm::vec3(0,value,0));
+        }
     }
     inline void transZf(const GLfloat& value){
-         mTransform->setPos(*mTransform->getPos()+glm::vec3(0,0,value));;
+        Transform *mTransform = (Transform *)mAccessorys[TRANSFORM_ACCESSORY];
+        if(mTransform){
+            mTransform->setPos(*mTransform->getPos()+glm::vec3(0,0,value));
+        }
     }
     inline void scaleXf(const GLfloat& value){
-        mTransform->setScale(*mTransform->getScale()*glm::vec3(value,1.0f,1.0f));;
+        Transform *mTransform = (Transform *)mAccessorys[TRANSFORM_ACCESSORY];
+        if(mTransform){
+            mTransform->setScale(*mTransform->getScale()*glm::vec3(value,1.0f,1.0f));
+        }
     }
     inline void scaleYf(const GLfloat& value){
-        mTransform->setScale(*mTransform->getScale()*glm::vec3(1.0f,value,1.0f));;
+        Transform *mTransform = (Transform *)mAccessorys[TRANSFORM_ACCESSORY];
+        if(mTransform){
+            mTransform->setScale(*mTransform->getScale()*glm::vec3(1.0f,value,1.0f));
+        }
     }
     inline void scaleZf(const GLfloat& value){
-        mTransform->setScale(*mTransform->getScale()*glm::vec3(1.0f,1.0f,value));;
+        Transform *mTransform = (Transform *)mAccessorys[TRANSFORM_ACCESSORY];
+        if(mTransform){
+            mTransform->setScale(*mTransform->getScale()*glm::vec3(1.0f,1.0f,value));
+        }
     }
+    inline void setAccessory(MeshAccessory* accessory,AccessoryType type){
+        mAccessorys[type] = accessory;
+        accessory->setMesh(this);
+    }
+
+    inline const MeshAccessory* getMeshAccessory(AccessoryType type){
+        return  mAccessorys[type];
+    }
+
+
     virtual ~Mesh();
 protected:
     inline float getRatio(){return mRatio;}
@@ -55,11 +100,7 @@ private:
     void setProjectionMatrix(const GLsizei& width,const GLsizei& height);
 private:
     float  mRatio;
-    Shader* shader;
-    Camera* camera;
-    Transform *mTransform;
-    BaseRender* mRender;
-
+    MeshAccessory* mAccessorys[NUM_ACCESSORYS];
 };
 
 #endif // MESH_H

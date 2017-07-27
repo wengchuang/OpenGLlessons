@@ -3,7 +3,8 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-class Transform
+#include "meshaccessory.h"
+class Transform : public MeshAccessory
 {
 public:
     Transform(const glm::vec3& pos=glm::vec3(),

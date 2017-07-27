@@ -6,10 +6,13 @@
 #include <QDebug>
 static Mesh* cusMesh = NULL;
 static BaseRender* mRender = NULL;
+static Shader* mShader = NULL;
+static Transform* mTransform = NULL;
+static Camera*    mCamera = NULL;
 
 static void display(void){
     if(cusMesh){
-        cusMesh->onDraw();
+        cusMesh->update();
     }
 
 }
@@ -65,14 +68,25 @@ struct WindowEventCallBacks* getCusWindowEventCallBacks(void){
 }
 
 static int cusAdapterInit(){
-    cusMesh = new Mesh;
+    mShader = new Shader;
+    mTransform = new Transform;
+    mCamera = new Camera;
+    mShader->shaderInit();
+
     mRender = new TriangleRender;
-    cusMesh->setRender(mRender);
-    return cusMesh->initData();
+
+    cusMesh = new Mesh(mRender,
+                       mShader,
+                       mCamera,
+                       mTransform);
+    return 0;
 }
 static int cusAdapterUninit(){
     delete cusMesh;
     delete mRender;
+    delete mShader;
+    delete mTransform;
+    delete mCamera;
     return 0;
 }
 

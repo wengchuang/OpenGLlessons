@@ -2,6 +2,7 @@
 #define SHADERLODER_H
 #include <GL/glew.h>
 #include <GL/glut.h>
+#include "meshaccessory.h"
 #include "transform.h"
 #include "camera.h"
 
@@ -11,7 +12,7 @@ struct ShaderInfo{
     GLint ShaderType;
 };
 
-class Shader
+class Shader : public MeshAccessory
 {
 public:
     Shader();
