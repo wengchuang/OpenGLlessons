@@ -7,13 +7,14 @@
 class PyramidRender:public BaseRender
 {
 public:
-    PyramidRender();
+    PyramidRender(const int& cnt =5);
     virtual void onRender();
     virtual void onSurfaceChanaged(const GLsizei &width, const GLsizei &height);
+    ~PyramidRender();
 private:
     GLuint   mRadius;
-    static const     GLuint POINTCNT = 15 ;
-    GLfloat   mPoints[3*(POINTCNT+1)];
+    QVector<glm::vec3> *mPoints;
+    int  mCnt;
 };
 
 #endif // PYRAMIDMESH_H

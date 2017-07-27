@@ -74,7 +74,7 @@ static int cusAdapterInit(){
     mCamera = new Camera;
     mShader->shaderInit();
 
-    mRender = new PrismRender;
+    mRender = new PyramidRender;
 
     cusMesh = new Mesh(mRender,
                        mShader,
