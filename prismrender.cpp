@@ -8,7 +8,7 @@ PrismRender::PrismRender(const int& pointCnt)
     mPoints->resize((mCnt+1)*2*2);
 }
 void PrismRender::onRender(){
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glBindVertexArray(getVertArrObj());
     glDrawArrays(GL_TRIANGLE_FAN,0,mPoints->size());
     glBindVertexArray(0);
@@ -30,12 +30,12 @@ void PrismRender::onSurfaceChanaged(const GLsizei& width,const GLsizei& height){
     for(int i=0;i<(mCnt);i++){
         GLfloat x = mRadius*glm::sin(spec*i);
         GLfloat y = mRadius*glm::cos(spec*i);
-        point = glm::vec3(x,y,-100);
+        point = glm::vec3(x,y,-500);
         index++;
 
         mPoints->replace(2*(mCnt+1)+index/2,point);
         mPoints->replace(index,point);
-        point = glm::vec3(x,y,-10);
+        point = glm::vec3(x,y,-200);
         index++;
         mPoints->replace(3*(mCnt+1)+index/2,point);
         mPoints->replace(index,point);
