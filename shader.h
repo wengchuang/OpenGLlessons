@@ -3,9 +3,6 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include "meshaccessory.h"
-#include "transform.h"
-#include "camera.h"
-
 
 struct ShaderInfo{
     const char* fileName;
@@ -24,14 +21,12 @@ public:
         }
         return ret;
     }
-    int shaderInit();
-    virtual void update(const Transform& transForm,
-                        const Camera& camera);
+    int shaderInit(const QList<ShaderInfo*>&infos);
+
     virtual ~Shader();
-protected:
-    virtual int onShaderInit();
+
 private:
-    const GLuint& loadShaderProgram(ShaderInfo* infos,int size);
+    const GLuint& loadShaderProgram(const QList<ShaderInfo*>& infos);
     GLuint  compileFile(const ShaderInfo& info);
     GLuint  linkProgram(GLuint* shaderIds,int size);
     void destroyProgram();
