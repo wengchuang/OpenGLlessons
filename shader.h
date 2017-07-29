@@ -2,41 +2,58 @@
 #define SHADERLODER_H
 #include <GL/glew.h>
 #include <GL/glut.h>
-#include "meshaccessory.h"
+#include <glm/glm.hpp>
 
-struct ShaderInfo{
-    const char* fileName;
-    GLint ShaderType;
+#define MAX_DESC 8
+
+struct VertexLocDesc{
+    GLuint      local;
+    const char* name;
+};
+struct UniformLocDesc{
+    enum UniformType{
+        TYPE_FOR_NORMAL,
+        TYPE_FOR_PV,
+        TYPE_FOR_M
+    };
+    const char* name;
+    UniformType type;
 };
 
-class Shader : public MeshAccessory
+struct ShaderInfo{
+    const char* vsfileName;
+    const char* fsfileName;
+    VertexLocDesc*vertexDescs[MAX_DESC];
+    UniformLocDesc*uniformDescs[MAX_DESC];
+
+};
+
+class Shader
 {
 public:
     Shader();
     inline int bindShader(){
         int ret = -1;
-        if(proShaderId > 0){
-            glUseProgram(proShaderId);
+        if(programId > 0){
+            glUseProgram(programId);
             ret = 0;
         }
         return ret;
     }
-    int shaderInit(const QList<ShaderInfo*>&infos);
-
+    int shaderInit(const ShaderInfo* info);
+    int setPVMmatrix(const glm::mat4& pvmat,const glm::mat4& modelMat);
     virtual ~Shader();
 
 private:
-    const GLuint& loadShaderProgram(const QList<ShaderInfo*>& infos);
-    GLuint  compileFile(const ShaderInfo& info);
-    GLuint  linkProgram(GLuint* shaderIds,int size);
-    void destroyProgram();
+    int bindVertexAtrributes(VertexLocDesc**vertexDescs);
+    int bindUniforms(UniformLocDesc**uniformDescs);
 private:
     enum{
         TRANSFORM_U,
         PROJECTION_U,
         NUM_UNIFORM
     };
-    GLuint proShaderId;
+    GLuint programId;
     GLuint mUniforms[NUM_UNIFORM];
 };
 

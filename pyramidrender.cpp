@@ -8,14 +8,7 @@ PyramidRender::PyramidRender(const int& cnt)
     mCnt = cnt;
     mPoints = new QVector<glm::vec3>(mCnt+2);
 }
-void PyramidRender::onRender()
-{
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glBindVertexArray(getVertArrObj());
-    glDrawArrays(GL_TRIANGLE_FAN,0,mPoints->size());
-    glBindVertexArray(0);
 
-}
 void PyramidRender::onSurfaceChanaged(const GLsizei &width, const GLsizei &height){
 
     mRadius = (float) width/height*2;
@@ -32,20 +25,17 @@ void PyramidRender::onSurfaceChanaged(const GLsizei &width, const GLsizei &heigh
     mPoints->replace(0,glm::vec3(0,0,-100.f));
     mPoints->replace(mCnt+1,mPoints->at(1));
 
-    const GLuint&  VBO = getVertArrBuffer(BaseRender::POSITION_VB);
-    const GLuint&  VAO = getVertArrObj();
+    glVertexAttribPointer (0,3,GL_FLOAT, GL_FALSE, 0, mPoints->data() );
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER,VBO);
-    glBufferData(GL_ARRAY_BUFFER,mPoints->size()*sizeof(glm::vec3),mPoints->data(),GL_STATIC_DRAW);
-
-
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(GLfloat),(GLvoid*)0);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER,0);
-    glBindVertexArray(0);
-
+}
+void PyramidRender::onUpdate(Shader* shader,
+                      const glm::mat4& pvMat,
+                      const glm::mat4& modelMat){
+    shader->setPVMmatrix(pvMat,modelMat);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glEnableVertexAttribArray (0);
+    glDrawArrays( GL_TRIANGLE_FAN, 0, mPoints->size() );
+    glDisableVertexAttribArray(0);
 }
 PyramidRender::~PyramidRender(){
     delete mPoints;

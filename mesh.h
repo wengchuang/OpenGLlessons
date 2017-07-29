@@ -3,10 +3,10 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <QDebug>
-#include "shader.h"
+#include "baserender.h"
 #include "camera.h"
 #include "transform.h"
-#include "baserender.h"
+#include "renderobserver.h"
 
 class MeshAccessory;
 
@@ -15,17 +15,14 @@ class Mesh
 {
 public:
     enum AccessoryType{
-        SHADER_ACCESSORY,
         CAMERA_ACCESSORY,
         TRANSFORM_ACCESSORY,
         RENDER_ACCESSORY,
         NUM_ACCESSORYS
     };
 
-    Mesh(BaseRender* render = NULL,
-         Shader*shader = NULL,
-         Camera*camera = NULL,
-         Transform *mTransform = NULL);
+    Mesh(BaseRender* render = NULL);
+    int meshInit();
     void update();
     void onSurfaceChanaged(const GLsizei& width,const GLsizei& height);
 
@@ -100,6 +97,7 @@ private:
     void setProjectionMatrix(const GLsizei& width,const GLsizei& height);
 private:
     float  mRatio;
+    RenderObServer *mObserver;
     MeshAccessory* mAccessorys[NUM_ACCESSORYS];
 };
 

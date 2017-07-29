@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include "meshaccessory.h"
-class Transform : public MeshAccessory
+class Transform:public MeshAccessory
 {
 public:
     Transform(const glm::vec3& pos=glm::vec3(),

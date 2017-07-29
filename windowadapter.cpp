@@ -1,15 +1,13 @@
 #include "windowadapter.h"
 #include "trianglerender.h"
 #include "pyramidrender.h"
-#include "baserender.h"
 #include "prismrender.h"
+#include "baserender.h"
 #include "mesh.h"
 #include <QDebug>
 static Mesh* cusMesh = NULL;
 static BaseRender* mRender = NULL;
-static Shader* mShader = NULL;
-static Transform* mTransform = NULL;
-static Camera*    mCamera = NULL;
+
 
 static void display(void){
     if(cusMesh){
@@ -69,25 +67,19 @@ struct WindowEventCallBacks* getCusWindowEventCallBacks(void){
 }
 
 static int cusAdapterInit(){
-    mShader = new Shader;
-    mTransform = new Transform;
-    mCamera = new Camera;
-    mShader->shaderInit();
 
-    mRender = new PyramidRender;
 
-    cusMesh = new Mesh(mRender,
-                       mShader,
-                       mCamera,
-                       mTransform);
-    return 0;
+    mRender = new PrismRender;
+    qDebug()<<"cusAdapterInit...\n";
+
+    cusMesh = new Mesh(mRender);
+    qDebug()<<"cusAdapterInit end \n";
+
+    return cusMesh->meshInit();
 }
 static int cusAdapterUninit(){
     delete cusMesh;
     delete mRender;
-    delete mShader;
-    delete mTransform;
-    delete mCamera;
     return 0;
 }
 

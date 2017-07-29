@@ -8,9 +8,12 @@ class PyramidRender:public BaseRender
 {
 public:
     PyramidRender(const int& cnt =5);
-    virtual void onRender();
     virtual void onSurfaceChanaged(const GLsizei &width, const GLsizei &height);
     ~PyramidRender();
+protected:
+    virtual void onUpdate(Shader* shader,
+                          const glm::mat4& pvMat,
+                          const glm::mat4& modelMat);
 private:
     GLuint   mRadius;
     QVector<glm::vec3> *mPoints;

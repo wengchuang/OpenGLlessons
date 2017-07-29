@@ -1,137 +1,78 @@
 #include "shader.h"
-#include <QFile>
+#include "glslcompiler.h"
 #include <QDebug>
-#include <QTextStream>
-static struct ShaderInfo infos[]={
-{"./mesh.vs",GL_VERTEX_SHADER},
-{"./mesh.fs",GL_FRAGMENT_SHADER}
-};
 
-Shader::Shader():proShaderId(0)
+Shader::Shader()
 {
+    programId = 0;
     for(int i=0;i<NUM_UNIFORM;i++){
         mUniforms[i] = 0;
     }
 }
 
-GLuint Shader::compileFile(const ShaderInfo& info){
-    int ret = 0;
-    QString text;
-    char* context;
-    GLuint shaderId = glCreateShader(info.ShaderType);
-    QFile file(info.fileName);
-    if(!file.open(QIODevice::ReadOnly)){
-        qDebug()<<"open "<<info.fileName<<"error";
+
+int Shader::setPVMmatrix(const glm::mat4& pvmat,const glm::mat4& modelMat){
+
+    if(programId > 0){
+        glUniformMatrix4fv(mUniforms[PROJECTION_U],1,GL_FALSE,&pvmat[0][0]);
+        glUniformMatrix4fv(mUniforms[TRANSFORM_U],1,GL_FALSE,&modelMat[0][0]);
+
+    }
+
+}
+
+int Shader::shaderInit(const ShaderInfo* info){
+    int ret = -1;
+    qDebug()<<"shader init begin...";
+    programId = GLSLCompiler::compileFromeFile(info->vsfileName,
+                                  info->fsfileName);
+    if(programId == 0){
         return ret;
     }
-    QTextStream is(&file);
-    GLint Result = GL_FALSE;
-    int InfoLogLength;
-
-    text = is.readAll();
-    context = text.toLocal8Bit().data();
-
-    glShaderSource(shaderId,1,(const GLchar**)&context,NULL);
-    glCompileShader(shaderId);
-
-    glGetShaderiv(shaderId, GL_COMPILE_STATUS, &Result);;
-    glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if ( InfoLogLength > 0 ){
-            QVector<char> VertexShaderErrorMessage(InfoLogLength+1);
-            glGetShaderInfoLog(shaderId, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-            qDebug()<<(&VertexShaderErrorMessage[0]);
-     }
-    if(Result != GL_FALSE){
-        ret = shaderId;
-    }
-    file.close();
-    return ret;
+    qDebug()<<"compile end...";
+    bindVertexAtrributes((VertexLocDesc**)(info->vertexDescs));
+    bindUniforms((UniformLocDesc**)(info->uniformDescs));
+    return 0;
 }
-GLuint  Shader::linkProgram(GLuint* shaderIds,int size){
-    int i = 0;
-    GLint Result = GL_FALSE;
-    int InfoLogLength;
-    proShaderId = glCreateProgram();
-    for(i = 0;i< size;i++){
-        glAttachShader(proShaderId, shaderIds[i]);
+int Shader::bindUniforms(  UniformLocDesc**uniformDescs){
+    UniformLocDesc*tmp = uniformDescs[0];
+    GLuint matRef;
+    for(int i= 0;i<MAX_DESC;i++ ){
+        tmp = uniformDescs[i];
+        if(tmp){
+            matRef = glGetUniformLocation( programId, tmp->name );
+            if(tmp->type == UniformLocDesc::TYPE_FOR_PV){
+               mUniforms[PROJECTION_U] =  matRef;
+            }else if(tmp->type == UniformLocDesc::TYPE_FOR_M){
+                mUniforms[TRANSFORM_U] =  matRef;
+            }
+        }else{
+            break;
+        }
     }
-
-    glLinkProgram(proShaderId);
-
-    // Check the program
-    glGetProgramiv(proShaderId, GL_LINK_STATUS, &Result);
-    glGetProgramiv(proShaderId, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if ( InfoLogLength > 0 ){
-        QVector<char> ProgramErrorMessage(InfoLogLength+1);
-        glGetProgramInfoLog(proShaderId, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-        qDebug()<<(&ProgramErrorMessage[0]);
-    }
-
-    for(i = 0;i< size;i++){
-        glDetachShader(proShaderId, shaderIds[i]);
-        glDeleteShader(shaderIds[i]);
-    }
-
-    if(Result == GL_FALSE){
-        proShaderId = 0;
-    }
-    return proShaderId;
+    return 0;
 }
-
-const GLuint& Shader::loadShaderProgram(const QList<ShaderInfo*>& infos){
-    if(proShaderId > 0){
-        destroyProgram();
-    }
-
-    int i = 0;
-    QVector<GLuint> shaderIds(infos.size());
-    for(i=0;i<size;i++){
-        shaderIds[i] = compileFile(infos[i]);
-        if(shaderIds[i] == 0){
-            return proShaderId;
+int Shader::bindVertexAtrributes( VertexLocDesc**vertexDescs){
+    VertexLocDesc*tmp;
+    for(int i= 0;i<MAX_DESC;i++ ){
+        tmp = vertexDescs[i];
+        if(tmp){
+            glBindAttribLocation( programId, tmp->local,  tmp->name);
+        }else{
+            break;
         }
 
     }
-    proShaderId =linkProgram(shaderIds.data(),size);
-    if(proShaderId > 0){
-       mUniforms[TRANSFORM_U] = glGetUniformLocation( proShaderId, "g_matModelMaxtix");
-       mUniforms[PROJECTION_U] = glGetUniformLocation( proShaderId,"g_matViewProjMaxtix");
-       qDebug()<<"shader init ok!\n";
-    }
-    return proShaderId;
-}
-#if 0
-void Shader::update(const Transform& transForm,const Camera& camera){
-
-    if(proShaderId > 0){
-        glm::mat4 proj = camera.getViewProjection();
-        glUniformMatrix4fv(mUniforms[PROJECTION_U],1,GL_FALSE,&proj[0][0]);
-
-        glm::mat4 model = transForm.getModelMatrix();
-        glUniformMatrix4fv(mUniforms[TRANSFORM_U],1,GL_FALSE,&model[0][0]);
-
-    }
+    return 0;
 
 }
-#endif
-int Shader::shaderInit(const QList<ShaderInfo*>& infos){
-    int ret = -1;
-    if(loadShaderProgram(infos) > 0){
-        ret = 0;
-    }
-    return ret;
-}
 
-void Shader::destroyProgram(){
-    if(proShaderId >0){
-        glDeleteProgram(proShaderId);
-    }
+
+Shader::~Shader(){
     for(int i=0;i<NUM_UNIFORM;i++){
         mUniforms[i] = 0;
     }
-    proShaderId = 0;
-}
-
-Shader::~Shader(){
-    destroyProgram();
+    if(programId > 0){
+        GLSLCompiler::destroyProgram(programId);
+    }
 }

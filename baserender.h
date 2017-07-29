@@ -6,25 +6,20 @@
 #include <QList>
 #include "shader.h"
 #include "meshaccessory.h"
-
-class IRenderObserver{
-    virtual glm::mat4 observerViewMatrix() = 0;
-    virtual glm::mat4 observerModelMatrix() = 0;
-    virtual ~IRenderControler(){}
-};
+#include "irenderobserver.h"
 
 class BaseRender:public MeshAccessory
 {
 public:
-    BaseRender(const IRenderObserver* = NULL);
-    int renderInit();
-    void update(const IRenderObserver* = NULL);
+    BaseRender(IRenderObserver* = NULL);
+    virtual int init();
+    void update(IRenderObserver* = NULL);
     //这是一个不好的实现，应该注册为一个监听器
     virtual void onSurfaceChanaged(const GLsizei& width,const GLsizei& height){
         Q_UNUSED(width);
         Q_UNUSED(height);
     }
-    inline void setObserver(const IRenderObserver* observer){
+    inline void setObserver(IRenderObserver* observer){
         this->mIobserver = observer;
     }
     virtual ~BaseRender();
@@ -33,9 +28,10 @@ protected:
         POSITION_VB,
         NUM_BUFFERS
     };
-    virtual QList<ShaderInfo*> onLoadShaderInfo()= 0;
-    virtual void onCompileShaderProgramSuccessful(Shader* shader) = 0;
-    virtual void onUpdate(IRenderObserver* tmpObserver) = 0;
+    virtual ShaderInfo* onLoadShaderInfo(){return NULL;}
+    virtual void onUpdate(Shader* shader,
+                          const glm::mat4& pvMat,
+                          const glm::mat4& modelMat) = 0;
     inline const GLuint& getVertArrObj(){
         if(mVertArrObj == 0){
             glGenVertexArrays(1,&mVertArrObj);

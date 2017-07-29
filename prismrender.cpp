@@ -7,13 +7,6 @@ PrismRender::PrismRender(const int& pointCnt)
     mCnt = pointCnt;
     mPoints->resize((mCnt+1)*2*2);
 }
-void PrismRender::onRender(){
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glBindVertexArray(getVertArrObj());
-    glDrawArrays(GL_TRIANGLE_FAN,0,mPoints->size());
-    glBindVertexArray(0);
-
-}
 void vec3toFloats(const QVector<glm::vec3>& vector,GLfloat* floats){
     for(int i=0;i<vector.size();i++){
         glm::vec3 value = vector.at(i);
@@ -51,20 +44,20 @@ void PrismRender::onSurfaceChanaged(const GLsizei& width,const GLsizei& height){
     mPoints->replace(3*(mCnt+1)+index/2,mPoints->at(1));
     mPoints->replace(index,mPoints->at(1));
 
-
-    const GLuint&  VBO = getVertArrBuffer(BaseRender::POSITION_VB);
-    const GLuint&  VAO = getVertArrObj();
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER,VBO);
-    glBufferData(GL_ARRAY_BUFFER,mPoints->size()*sizeof(glm::vec3),mPoints->data(),GL_STATIC_DRAW);
-
-
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(GLfloat),(GLvoid*)0);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER,0);
-    glBindVertexArray(0);
+    glVertexAttribPointer (0,3,GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), mPoints->data() );
 }
+
+void PrismRender::onUpdate(Shader* shader,
+                      const glm::mat4& pvMat,
+                      const glm::mat4& modelMat){
+    shader->setPVMmatrix(pvMat,modelMat);
+    glEnableVertexAttribArray (0);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, mPoints->size() );
+    glDisableVertexAttribArray(0);
+
+
+}
+
 PrismRender::~PrismRender(){
     delete mPoints;
 }

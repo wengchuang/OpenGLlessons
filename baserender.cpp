@@ -1,7 +1,9 @@
 #include "baserender.h"
-
-
-BaseRender::BaseRender(const IRenderObserver observer)
+#include <GL/glew.h>
+#include <GL/glut.h>
+#include <QDebug>
+#include "comshaderprover.h"
+BaseRender::BaseRender(IRenderObserver* observer)
 {
     mIobserver = observer;
     mShader = NULL;
@@ -10,17 +12,20 @@ BaseRender::BaseRender(const IRenderObserver observer)
         mVertArrBuffers[i] = 0;
     }
 }
-int BaseRender::renderInit(){
+int BaseRender::init(){
     int ret = -1;
-    QList<ShaderInfo*> infos = onLoadShaderInfo();
+    qDebug()<<"init render begin...";
+    ShaderInfo* infos = onLoadShaderInfo();
     mShader = new Shader;
-    ret = mShader->shaderInit(infos);
-    if(ret == 0){
-        onCompileShaderProgramSuccessful(mShader);
+    if(!infos){
+        COMShaderProver* prover = new COMShaderProver();
+        infos = prover->getShaderInfo();
     }
+    ret = mShader->shaderInit(infos);
+    qDebug()<<"init render end...";
     return ret;
 }
-void BaseRender::update(const IRenderObserver* observer){
+void BaseRender::update(IRenderObserver* observer){
     IRenderObserver* tmpObserver = observer;
     if(mShader){
         if(tmpObserver == NULL){
@@ -28,14 +33,17 @@ void BaseRender::update(const IRenderObserver* observer){
         }else{
 
         }
-        mShader->bindShader();
-        onUpdate(tmpObserver);
-        commitUpdate();
+        if(tmpObserver != NULL){
+            mShader->bindShader();
+            onUpdate(mShader,tmpObserver->observerViewMatrix(),
+                 tmpObserver->observerModelMatrix());
+            commitUpdate();
+        }
     }
 
 }
 void BaseRender::commitUpdate(){
-     glFulsh();
+     glFlush();
 }
 BaseRender::~BaseRender(){
     if(mVertArrBuffers[0] > 0){
