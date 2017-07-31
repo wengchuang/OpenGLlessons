@@ -5,14 +5,14 @@
 class GLES2WithGLU : public AbsGLES2App
 {
 public:
-    GLES2WithGLU(int argc ,char**argv,unsigned int platdata= 0);
+    GLES2WithGLU(int argc ,char**argv);
 protected:
     int initWindows();
     int onInitOpenGLES();
     void onDestroyOpenGLES();
-    GLESFrame* onCreateGLESFrame();
-    void registerSupportEvents(IGLInput* input);
+    void onInputDeviceChanaged(IGLInput*);
+    void onWindowsSizeChanaged(int width,int height);
     int mainLoop();
-};
 
+};
 #endif // GLES2WITHGLU_H

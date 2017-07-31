@@ -1,29 +1,37 @@
 #include "absgles2app.h"
+#include "glesframegenerator.h"
+#include <QDebug>
 GLESAppContext*AbsGLES2App::mCtx =NULL;
 
 int AbsGLES2App::exec(){
-    int errCode = 0;
+    int errCode = -1;
     errCode =  initWindows();
     if(!errCode){
-       errCode = onInitOpenGLES();
+        errCode = onInitOpenGLES();
         if(!errCode){
             mCtx = initAppcontext();
             if(mCtx != NULL){
-                if(esFrame = onCreateGLESFrame()){
-                    if(esFrame != NULL){
-                        registerSupportEvents(esFrame);
-                        return mainLoop();
-                        delete esFrame;
-                        delete mCtx;
-                        onDestroyOpenGLES();
+                if(generator == NULL){
+                    generator = new GLESFrameGenerator;
+                }
+                if(generator){
+                    esFrame = generator->generateGLESFrame();
+                    errCode = esFrame->frameInit();
+                    if(!errCode){
+                        errCode = mainLoop();
                     }
+                    delete esFrame;
+                    delete mCtx;
+                    onDestroyOpenGLES();
                 }
             }
         }
     }
+    return errCode;
 }
 void AbsGLES2App::update(){
-    esFrame->onRender();
+    qDebug()<<"mWidth:"<<mWidth<<" mHeight:"<<mHeight;
+    esFrame->onRender(mWidth,mHeight);
 }
 GLESAppContext* AbsGLES2App::getGLESAppContext(){
     return mCtx;

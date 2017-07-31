@@ -6,8 +6,6 @@
 
 class IGLApp{
 public:
-    IGLApp(int argc ,char**argv,unsigned int platdata= 0){}
-
     virtual void setWidowsArea(const int&x,const int&y,const int& width,const int& height ) = 0;
     virtual void setWindowsTitle(const char* title) = 0;
     virtual int exec() = 0;

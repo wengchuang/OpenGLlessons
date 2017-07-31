@@ -4,6 +4,7 @@
 
 #include "iglapp.h"
 #include "gles2withglu.h"
+#include "shootingframe.h"
 
 int main(int argc,char*argv[])
 {
@@ -20,10 +21,15 @@ int main(int argc,char*argv[])
     adapter->adapterUninit();
     delete win;
 #endif
-    IGLApp* app = new GLES2WithGLU(argc,argv);
+#if 1
+    GLES2WithGLU* app = new GLES2WithGLU(argc,argv);
+    app->setWidowsArea(600,150,800,600);
+    ShootingFrameGenerator* generator = new ShootingFrameGenerator;
+    app->setGLESFrameGenerator(generator);
     app->exec();
+    delete generator;
     delete app;
-
+#endif
     return 0;
 }
 

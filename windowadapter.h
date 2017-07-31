@@ -8,4 +8,5 @@ struct WindowAdapter
    struct WindowEventCallBacks*(*getWindowEventCallBacks)(void);
 };
 struct WindowAdapter*getWindowAdapter();
+
 #endif // WINDOWADAPTER_H

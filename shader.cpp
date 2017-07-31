@@ -4,28 +4,32 @@
 
 Shader::Shader()
 {
+    int i=0;
     programId = 0;
-    for(int i=0;i<NUM_UNIFORM;i++){
+    for(i=0;i<NUM_UNIFORM;i++){
         mUniforms[i] = 0;
+    }
+    for(i = 0;i<MAX_DESC;i++){
+        attributes[i] = 0xff;
     }
 }
 
 
-int Shader::setPVMmatrix(const glm::mat4& pvmat,const glm::mat4& modelMat){
+int Shader::setPVMmatrix(const glm::mat4& pvmat){
 
     if(programId > 0){
-        glUniformMatrix4fv(mUniforms[PROJECTION_U],1,GL_FALSE,&pvmat[0][0]);
-        glUniformMatrix4fv(mUniforms[TRANSFORM_U],1,GL_FALSE,&modelMat[0][0]);
-
+        glUniformMatrix4fv(mUniforms[PVM_U],1,GL_FALSE,&pvmat[0][0]);
     }
-
+    return 0;
 }
 
 int Shader::shaderInit(const ShaderInfo* info){
     int ret = -1;
     qDebug()<<"shader init begin...";
-    programId = GLSLCompiler::compileFromeFile(info->vsfileName,
-                                  info->fsfileName);
+    qDebug()<<"vsfileName:"<<info->vsfileName;
+    qDebug()<<"fsfileName:"<<info->fsfileName;
+    programId = GLSLCompiler::compileFromeFile(info->vsfileName,info->fsfileName);
+    qDebug()<<"programId:"<<programId;
     if(programId == 0){
         return ret;
     }
@@ -34,17 +38,15 @@ int Shader::shaderInit(const ShaderInfo* info){
     bindUniforms((UniformLocDesc**)(info->uniformDescs));
     return 0;
 }
-int Shader::bindUniforms(  UniformLocDesc**uniformDescs){
+int Shader::bindUniforms(UniformLocDesc**uniformDescs){
     UniformLocDesc*tmp = uniformDescs[0];
     GLuint matRef;
     for(int i= 0;i<MAX_DESC;i++ ){
         tmp = uniformDescs[i];
         if(tmp){
             matRef = glGetUniformLocation( programId, tmp->name );
-            if(tmp->type == UniformLocDesc::TYPE_FOR_PV){
-               mUniforms[PROJECTION_U] =  matRef;
-            }else if(tmp->type == UniformLocDesc::TYPE_FOR_M){
-                mUniforms[TRANSFORM_U] =  matRef;
+            if(tmp->type == UniformLocDesc::TYPE_FOR_PVM){
+               mUniforms[PVM_U] =  matRef;
             }
         }else{
             break;
@@ -52,12 +54,34 @@ int Shader::bindUniforms(  UniformLocDesc**uniformDescs){
     }
     return 0;
 }
+
+
+void Shader::enableVertexAttributeArrays(){
+    for(int i = 0;i<MAX_DESC;i++){
+        if(attributes[i] != 0xff){
+            glEnableVertexAttribArray(attributes[i]);
+        }else{
+            break;
+        }
+    }
+}
+void Shader::disableVertexAttributeArrays(){
+    for(int i = 0;i<MAX_DESC;i++){
+        if(attributes[i] != 0xff){
+            glDisableVertexAttribArray(attributes[i]);
+        }else{
+            break;
+        }
+    }
+}
+
 int Shader::bindVertexAtrributes( VertexLocDesc**vertexDescs){
     VertexLocDesc*tmp;
     for(int i= 0;i<MAX_DESC;i++ ){
         tmp = vertexDescs[i];
         if(tmp){
-            glBindAttribLocation( programId, tmp->local,  tmp->name);
+            glBindAttribLocation(programId, tmp->local,  tmp->name);
+            attributes[i] = tmp->local;
         }else{
             break;
         }

@@ -50,8 +50,9 @@ void PrismRender::onSurfaceChanaged(const GLsizei& width,const GLsizei& height){
 void PrismRender::onUpdate(Shader* shader,
                       const glm::mat4& pvMat,
                       const glm::mat4& modelMat){
-    shader->setPVMmatrix(pvMat,modelMat);
-    glEnableVertexAttribArray (0);
+    glm::mat4 mat = pvMat*modelMat;
+    shader->setPVMmatrix(mat);
+    glEnableVertexAttribArray(0);
     glDrawArrays(GL_TRIANGLE_FAN, 0, mPoints->size() );
     glDisableVertexAttribArray(0);
 

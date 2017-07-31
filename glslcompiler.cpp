@@ -45,6 +45,7 @@ GLuint GLSLCompiler::compileFromString(const char* vertexString,
         qDebug()<<"compile "<<fragmentString <<"failed";
         return ids[1];
     }
+
     return linkProgram(ids,2);
 
 }
@@ -56,7 +57,6 @@ GLuint  GLSLCompiler::compile(GLuint type,const char** text){
     GLuint shaderId = glCreateShader(type);
     glShaderSource(shaderId,1,(const GLchar**)text,NULL);
     glCompileShader(shaderId);
-
     glGetShaderiv(shaderId, GL_COMPILE_STATUS, &res);;
     glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &InfoLogLength);
     if ( InfoLogLength > 0 ){

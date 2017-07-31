@@ -33,8 +33,8 @@ void TriangleRender::onSurfaceChanaged(const GLsizei &width, const GLsizei &heig
 void TriangleRender::onUpdate(Shader* shader,
                       const glm::mat4& pvMat,
                       const glm::mat4& modelMat){
-
-    shader->setPVMmatrix(pvMat,modelMat);
+    glm::mat4 mat = pvMat*modelMat;
+    shader->setPVMmatrix(mat);
     glEnableVertexAttribArray (0);
     glDrawArrays( GL_TRIANGLES, 0, 3 );
     glDisableVertexAttribArray(0);

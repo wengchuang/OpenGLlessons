@@ -31,7 +31,8 @@ void PyramidRender::onSurfaceChanaged(const GLsizei &width, const GLsizei &heigh
 void PyramidRender::onUpdate(Shader* shader,
                       const glm::mat4& pvMat,
                       const glm::mat4& modelMat){
-    shader->setPVMmatrix(pvMat,modelMat);
+    glm::mat4 mat = pvMat*modelMat;
+    shader->setPVMmatrix(mat);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glEnableVertexAttribArray (0);
     glDrawArrays( GL_TRIANGLE_FAN, 0, mPoints->size() );
