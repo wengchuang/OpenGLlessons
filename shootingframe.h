@@ -1,12 +1,13 @@
 #ifndef SHOOTINGFRAME_H
 #define SHOOTINGFRAME_H
 #include "iglesframegenerator.h"
-
 class ShootingFrame : public GLESFrame
 {
-public:
-    ShootingFrame();
+    friend class ShootingFrameGenerator;
 protected:
+    ShootingFrame(){}
+protected:
+
     void renderSelf(int width, int height,void*usrData);
 
 };

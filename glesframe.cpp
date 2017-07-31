@@ -12,7 +12,6 @@ int GLESFrame::frameInit(){
     if(mShader){
         return 0;
     }
-    qDebug()<<"frameInit begin...";
     ShaderInfo* info = onLoadShaderInfo();
     if(!mShader){
         mShader = new Shader;
@@ -22,14 +21,12 @@ int GLESFrame::frameInit(){
         info = prover->getShaderInfo();
     }
     ret = mShader->shaderInit(info);
-    qDebug()<<"frameInit end...";
     return ret;
 }
 GLESFrame::~GLESFrame(){
     delete mShader;
 }
 void GLESFrame::onRender(int width, int height,void*usrData){
-    qDebug()<<"GLESFrame::onRender ...";
     renderSelf(width,height,usrData);
     ChildList::iterator itr = childs.begin();
     for ( ;itr != childs.end() ; )
@@ -38,6 +35,7 @@ void GLESFrame::onRender(int width, int height,void*usrData){
         item->onRender(width,height,usrData);
         ++itr;
     }
+
 }
 void GLESFrame::onMouseMove(int absx, int absy, int  absz){
     ChildList::iterator itr = childs.begin();

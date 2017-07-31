@@ -16,7 +16,6 @@ public:
         this->mInput = input;
     }
     void update(){
-        qDebug()<<"update ...";
         mUpdateDelegate();
     }
     inline IGLInput*getInput(){

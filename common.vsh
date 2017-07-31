@@ -1,9 +1,7 @@
 attribute vec3 position;
-uniform  mat4   modelMat;
-uniform  mat4   projViewMat;
+uniform  mat4   pvmMat;
 
 void main()
 {
-    mat4 matix = projViewMat*modelMat;
-    gl_Position = matix*vec4(position,1.0f);
+    gl_Position = pvmMat*vec4(position,1.0f);
 }

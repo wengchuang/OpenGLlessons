@@ -1,4 +1,5 @@
 #include "trianglerender.h"
+#include <glm/gtx/transform.hpp>
 #include <QDebug>
 
 
@@ -9,7 +10,6 @@ TriangleRender::TriangleRender()
 }
 void TriangleRender::onSurfaceChanaged(const GLsizei &width, const GLsizei &height)
 {
-
     GLfloat value = (float)width/height;
     GLfloat mYValue = 1.0f;
 
@@ -35,10 +35,7 @@ void TriangleRender::onUpdate(Shader* shader,
                       const glm::mat4& modelMat){
     glm::mat4 mat = pvMat*modelMat;
     shader->setPVMmatrix(mat);
-    glEnableVertexAttribArray (0);
     glDrawArrays( GL_TRIANGLES, 0, 3 );
-    glDisableVertexAttribArray(0);
-
 }
 
 

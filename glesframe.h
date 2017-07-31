@@ -7,8 +7,8 @@
 
 class GLESFrame : public AbsGLFrame
 {
+    friend class GLESFrameGenerator;
 public:
-    GLESFrame();
     int frameInit();
     virtual ~GLESFrame();
     virtual void onRender(int width, int height,void*usrData = NULL);
@@ -35,6 +35,9 @@ public:
     *   输入
     */
     virtual void onChar(int ch);
+
+protected:
+    GLESFrame();
 
 protected:
     inline Shader* getShader(){

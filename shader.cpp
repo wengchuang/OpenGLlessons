@@ -25,15 +25,11 @@ int Shader::setPVMmatrix(const glm::mat4& pvmat){
 
 int Shader::shaderInit(const ShaderInfo* info){
     int ret = -1;
-    qDebug()<<"shader init begin...";
-    qDebug()<<"vsfileName:"<<info->vsfileName;
-    qDebug()<<"fsfileName:"<<info->fsfileName;
     programId = GLSLCompiler::compileFromeFile(info->vsfileName,info->fsfileName);
-    qDebug()<<"programId:"<<programId;
     if(programId == 0){
         return ret;
     }
-    qDebug()<<"compile end...";
+
     bindVertexAtrributes((VertexLocDesc**)(info->vertexDescs));
     bindUniforms((UniformLocDesc**)(info->uniformDescs));
     return 0;
@@ -80,8 +76,11 @@ int Shader::bindVertexAtrributes( VertexLocDesc**vertexDescs){
     for(int i= 0;i<MAX_DESC;i++ ){
         tmp = vertexDescs[i];
         if(tmp){
-            glBindAttribLocation(programId, tmp->local,  tmp->name);
-            attributes[i] = tmp->local;
+
+            qDebug()<<"VertexAtrributes name:"<<tmp->name;
+            //glBindAttribLocation(programId, tmp->local,  tmp->name);
+            attributes[i] = glGetAttribLocation(programId, tmp->name);
+            //attributes[i] = tmp->local;
         }else{
             break;
         }

@@ -28,11 +28,9 @@ FGAPI void    FGAPIENTRY glutTabletButtonFunc( void (* callback)( int, int, int,
 #endif
 
 static void onDisplay(void){
-    qDebug()<<"glutDisplayFunc....";
     GLUWindowCallBacks::getInstance()->update();
 }
 static void onResize(int width,int height){
-    qDebug()<<"glutReshapeFunc....";
     GLUWindowCallBacks::getInstance()->resizeCallBack(width,height);
 
 }
@@ -42,7 +40,6 @@ static void onKeyEvent(unsigned char, int, int ){
 GLUWindowCallBacks *GLUWindowCallBacks::instance = NULL;
 GLUWindowCallBacks::GLUWindowCallBacks()
 {
- qDebug()<<"consturcting ...";
     glutDisplayFunc(onDisplay);
     glutReshapeFunc(onResize);
     glutKeyboardFunc(onKeyEvent);
@@ -50,7 +47,6 @@ GLUWindowCallBacks::GLUWindowCallBacks()
 }
 GLUWindowCallBacks* GLUWindowCallBacks::getInstance(){
     if(!instance){
-        qDebug()<<"getinstance ...";
         instance = new GLUWindowCallBacks;
     }
     return instance;

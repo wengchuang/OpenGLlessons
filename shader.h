@@ -34,15 +34,11 @@ public:
     Shader();
     inline int bindShader(){
         int ret = -1;
-        qDebug()<<"11111111111111111111";
         if(programId > 0){
-            qDebug()<<"programId..............."<<programId;
             glUseProgram(programId);
-            qDebug()<<"2222222222222222222222";
-            //enableVertexAttributeArrays();
+            enableVertexAttributeArrays();
             ret = 0;
         }
-        qDebug()<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
         return ret;
     }
     inline int unbindShader(){

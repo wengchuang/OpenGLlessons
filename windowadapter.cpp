@@ -69,7 +69,7 @@ struct WindowEventCallBacks* getCusWindowEventCallBacks(void){
 static int cusAdapterInit(){
 
 
-    mRender = new PrismRender;
+    mRender = new TriangleRender;
     qDebug()<<"cusAdapterInit...\n";
 
     cusMesh = new Mesh(mRender);

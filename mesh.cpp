@@ -50,8 +50,8 @@ void Mesh::update(){
     if(mRender){
         glClear(GL_COLOR_BUFFER_BIT);
 
-        Camera*mCamera = (Camera*) mAccessorys[CAMERA_ACCESSORY];
-        Transform*mTransform = (Transform*)mAccessorys[TRANSFORM_ACCESSORY];
+        //Camera*mCamera = (Camera*) mAccessorys[CAMERA_ACCESSORY];
+        //Transform*mTransform = (Transform*)mAccessorys[TRANSFORM_ACCESSORY];
         mRender->update();
     }
 }

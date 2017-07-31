@@ -38,6 +38,7 @@ void BaseRender::update(IRenderObserver* observer){
             onUpdate(mShader,tmpObserver->observerViewMatrix(),
                  tmpObserver->observerModelMatrix());
             commitUpdate();
+           // mShader->unbindShader();
         }
     }
 
