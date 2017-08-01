@@ -37,7 +37,10 @@ GLESAppContext* AbsGLES2App::getGLESAppContext(){
     return mCtx;
 }
 GLESAppContext* AbsGLES2App::initAppcontext(){
-    return new GLESAppContext;
+    if(mCtx == NULL){
+        mCtx = new GLESAppContext;
+    }
+    return mCtx;
 }
 AbsGLES2App::~AbsGLES2App(){
 

@@ -5,10 +5,11 @@ char(&ArraySizeHelper(const T(&array)[N]))[N];
 
 static ShaderInfo info={"./common.vsh","./common.fsh"};
 static VertexLocDesc vertexLoc[]={
-    {0,"position"}
+    {0,"position"},{1,"_uv"}
 };
 static UniformLocDesc uniformDesc[]={
-    {"pvmMat",UniformLocDesc::TYPE_FOR_PVM}
+    {"pvmMat",UniformLocDesc::TYPE_FOR_PVM},
+    {"_texture",UniformLocDesc::TYPE_FOR_NORMAL}
 };
 COMShaderProver::COMShaderProver()
 {

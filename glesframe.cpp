@@ -12,16 +12,16 @@ int GLESFrame::frameInit(){
     if(mShader){
         return 0;
     }
-    ShaderInfo* info = onLoadShaderInfo();
+    mShaderInfo = onLoadShaderInfo();
     if(!mShader){
         mShader = new Shader;
     }
-    if(!info){
+    if(!mShaderInfo){
         COMShaderProver* prover = new COMShaderProver();
-        info = prover->getShaderInfo();
+        mShaderInfo = prover->getShaderInfo();
     }
-    ret = mShader->shaderInit(info);
-    return ret;
+    ret = mShader->shaderInit(mShaderInfo);
+    return onFrameInit();
 }
 GLESFrame::~GLESFrame(){
     delete mShader;

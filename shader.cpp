@@ -44,6 +44,10 @@ int Shader::bindUniforms(UniformLocDesc**uniformDescs){
             if(tmp->type == UniformLocDesc::TYPE_FOR_PVM){
                mUniforms[PVM_U] =  matRef;
             }
+            if(tmp->type == UniformLocDesc::TYPE_FOR_NORMAL){
+                mUniforms[NORMAL] = matRef;
+                tmp->uniforRef = matRef;
+            }
         }else{
             break;
         }
