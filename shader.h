@@ -5,7 +5,8 @@
 #include <glm/glm.hpp>
 #include <list>
 #include <QDebug>
-
+#include <map>
+using namespace std;
 #define MAX_DESC 8
 
 class ShaderInfo{
@@ -26,19 +27,19 @@ public:
         }
     }
     inline void setVsFileName(const char*fileName){
-        if(vsFileName != NULL){
-            strncpy(this->vsfileName,vsFileName,sizeof(this->vsfileName));
+        if(fileName != NULL){
+            strncpy(this->vsfileName,fileName,sizeof(this->vsfileName));
         }
     }
     inline void setFsFileName(const char*fileName){
-        if(fsFileName){
-            strncpy(this->fsfileName,fsFileName,sizeof(this->fsfileName));
+        if(fileName){
+            strncpy(this->fsfileName,fileName,sizeof(this->fsfileName));
         }
     }
     inline int addVertex(const char*name){
         int ret = -1;
         if(vertexIndex < MAX_DESC){
-            if(sizeof(this->vertexNames[vertexIndex] > strlen(name))){
+            if(sizeof(this->vertexNames[vertexIndex]) > strlen(name)){
                 strncpy(this->vertexNames[vertexIndex],name,sizeof(this->vertexNames[vertexIndex]));
                 vertexIndex++;
                 ret = 0;
@@ -50,7 +51,7 @@ public:
     inline int addUniform(const char* name){
         int ret = -1;
         if(uniformsIndex < MAX_DESC){
-            if(sizeof(this->uniformsNames[uniformsIndex] > strlen(name))){
+            if(sizeof(this->uniformsNames[uniformsIndex]) > strlen(name)){
                 strncpy(this->uniformsNames[uniformsIndex],name,sizeof(this->uniformsNames[uniformsIndex]));
                 uniformsIndex++;
                 ret = 0;
@@ -100,9 +101,40 @@ private:
 };
 
 class ShaderMap{
+public:
+   inline GLint getVertexRef(const char* name){
+        GLint ret = -1;
+        std::map<std::string,GLint>::iterator itr = vertexMap.find(std::string(name));
+        if(itr != vertexMap.end())
+        {
+            ret = itr->second;
+        }
+        return ret;
+   }
+
+   inline GLint getUniformRef(const char* name){
+       GLint ret = -1;
+       std::map<std::string,GLint>::iterator itr = uniformMap.find(std::string(name));
+       if(itr != uniformMap.end())
+       {
+           ret = itr->second;
+       }
+       return ret;
+   }
 private:
     friend class Shader;
-    void setVertexMapValue(char*name,GLint value);
+    inline void setVertexMapValue(char*name,GLint value){
+        vertexMap.insert(make_pair(name,   value));
+    }
+    inline void setUniformMapValue(char*name,GLint value){
+        uniformMap.insert(make_pair(name,   value));
+    }
+    inline void clear(){
+        vertexMap.clear();
+        uniformMap.clear();
+    }
+    std::map<std::string,GLint> vertexMap;
+    std::map<std::string,GLint> uniformMap;
 };
 
 class Shader
@@ -127,26 +159,23 @@ public:
         }
         return ret;
     }
-    int shaderInit(const ShaderInfo* info);
-    int setPVMmatrix(const glm::mat4& pvmat);
+    ShaderMap* shaderInit( ShaderInfo* info);
+    inline ShaderMap* getShaderMap(){
+        return mShaderMap;
+    }
     virtual ~Shader();
 
 private:
-    int bindVertexAtrributes(VertexLocDesc**vertexDescs);
-    int bindUniforms(UniformLocDesc**uniformDescs);
+    int bindVertexAtrributes(ShaderInfo* info);
+    int bindUniforms(ShaderInfo* info);
+
 
     void enableVertexAttributeArrays();
     void disableVertexAttributeArrays();
 
 private:
-    enum{
-        PVM_U,
-        NORMAL,
-        NUM_UNIFORM
-    };
+    ShaderMap* mShaderMap;
     GLuint programId;
-    GLuint attributes[MAX_DESC];
-    GLuint mUniforms[NUM_UNIFORM];
 };
 
 #endif // SHADERLODER_H

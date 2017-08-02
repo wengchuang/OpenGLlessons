@@ -7,6 +7,9 @@ class COMShaderProver
 public:
     COMShaderProver();
     ShaderInfo* getShaderInfo();
+    ~COMShaderProver();
+private:
+    ShaderInfo* mShaderInfo;
 };
 
 #endif // COMSHADERPROVER_H

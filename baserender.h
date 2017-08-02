@@ -48,7 +48,8 @@ private:
     //这里封装函数 为了屏蔽刷新的差异
     void commitUpdate();
 private:
-    Shader* mShader;
+    Shader*    mShader;
+    ShaderMap* mShaderMap;
     IRenderObserver* mIobserver;
     GLuint mVertArrObj;
     GLuint mVertArrBuffers[NUM_BUFFERS];

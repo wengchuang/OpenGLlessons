@@ -22,12 +22,15 @@ GLuint GLSLCompiler::compileFromeFile(const char* vertexFileName,
                           const char* fragmentFileName){
     GLuint Result = 0;
     QString vertexText,fragmentText;
+
     if(loadSourceFromeFile(vertexFileName,vertexText)== -1){
         return Result;
     }
+
     if(loadSourceFromeFile(fragmentFileName,fragmentText)== -1){
         return Result;
     }
+
     return compileFromString(vertexText.toLocal8Bit().data() ,
                              fragmentText.toLocal8Bit().data());
 }

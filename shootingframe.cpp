@@ -45,9 +45,10 @@ void ShootingFrame::renderSelf(int width ,int height ,void*){
         vv  +=  0.001f;
         glActiveTexture(GL_TEXTURE0 + 0);
         glBindTexture(GL_TEXTURE_2D,texture._texture);
-        mShader->setPVMmatrix(Projection);
+        GLint ref = getShaderMap()->getUniformRef("pvmMat");
+        glUniformMatrix4fv(ref,1,GL_FALSE,&Projection[0][0]);
 
-        glUniform1i(getShaderInfo()->uniformDescs[1]->uniforRef, 0);
+        glUniform1i(getShaderMap()->getUniformRef("_uv"), 0);
         glVertexAttribPointer(0,  3,  GL_FLOAT,   false,  5*sizeof(GLfloat),vert);
         glVertexAttribPointer(1,  2,  GL_FLOAT,   false, 5*sizeof(GLfloat),
                               &vert[3]);
@@ -57,30 +58,16 @@ void ShootingFrame::renderSelf(int width ,int height ,void*){
    mShader->unbindShader();
 }
 
-template<typename T, size_t N>
-char(&ArraySizeHelper(const T(&array)[N]))[N];
-#define ARRAY_SIZE(array) (sizeof(ArraySizeHelper(array)))
-
-static ShaderInfo info={"./common.vsh","./common.fsh"};
-static VertexLocDesc vertexLoc[]={
-    {0,"position"},{1,"_uv"}
-};
-static UniformLocDesc uniformDesc[]={
-    {"pvmMat",UniformLocDesc::TYPE_FOR_PVM},
-    {"_texture",UniformLocDesc::TYPE_FOR_NORMAL}
-};
-
 
 ShaderInfo* ShootingFrame::onLoadShaderInfo(){
-    int i = 0;
-    for(i=0;i<ARRAY_SIZE(vertexLoc);i++){
-        info.vertexDescs[i] = &vertexLoc[i];
+    if(!mShaderInfo){
+        mShaderInfo = new ShaderInfo;
+        mShaderInfo->setFsFileName("./shootingframe.fsh");
+        mShaderInfo->setVsFileName("./shootingframe.vsh");
+        mShaderInfo->addVertex("position");
+        mShaderInfo->addVertex("_uv");
+        mShaderInfo->addUniform("pvmMat");
+        mShaderInfo->addUniform("_texture");
     }
-    info.vertexDescs[i] = NULL;
-
-    for(i = 0;i<ARRAY_SIZE(uniformDesc);i++){
-        info.uniformDescs[i] = &uniformDesc[i];
-    }
-    info.uniformDescs[i] = NULL;
-    return &info;
+    return mShaderInfo;
 }

@@ -34,7 +34,8 @@ void TriangleRender::onUpdate(Shader* shader,
                       const glm::mat4& pvMat,
                       const glm::mat4& modelMat){
     glm::mat4 mat = pvMat*modelMat;
-    shader->setPVMmatrix(mat);
+    GLint ref = shader->getShaderMap()->getUniformRef("pvmMat");
+    glUniformMatrix4fv(ref,1,GL_FALSE,&mat[0][0]);
     glDrawArrays( GL_TRIANGLES, 0, 3 );
 }
 

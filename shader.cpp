@@ -4,50 +4,33 @@
 
 Shader::Shader()
 {
-    int i=0;
     programId = 0;
-    for(i=0;i<NUM_UNIFORM;i++){
-        mUniforms[i] = 0;
-    }
-    for(i = 0;i<MAX_DESC;i++){
-        attributes[i] = 0xff;
-    }
+    mShaderMap= NULL;
+
 }
 
 
-int Shader::setPVMmatrix(const glm::mat4& pvmat){
-
-    if(programId > 0){
-        glUniformMatrix4fv(mUniforms[PVM_U],1,GL_FALSE,&pvmat[0][0]);
-    }
-    return 0;
-}
-
-int Shader::shaderInit(const ShaderInfo* info){
-    int ret = -1;
-    programId = GLSLCompiler::compileFromeFile(info->vsfileName,info->fsfileName);
+ShaderMap* Shader::shaderInit(ShaderInfo* info){
+    programId = GLSLCompiler::compileFromeFile(info->getVsFileName(),info->getFsFileName());
     if(programId == 0){
-        return ret;
+        return NULL;
     }
-
-    bindVertexAtrributes((VertexLocDesc**)(info->vertexDescs));
-    bindUniforms((UniformLocDesc**)(info->uniformDescs));
-    return 0;
+    if(mShaderMap){
+        mShaderMap->clear();
+    }else{
+        mShaderMap = new ShaderMap;
+    }
+    bindVertexAtrributes(info);
+    bindUniforms(info);
+    return mShaderMap;
 }
-int Shader::bindUniforms(UniformLocDesc**uniformDescs){
-    UniformLocDesc*tmp = uniformDescs[0];
+int Shader::bindUniforms(ShaderInfo* info){
     GLuint matRef;
     for(int i= 0;i<MAX_DESC;i++ ){
-        tmp = uniformDescs[i];
-        if(tmp){
-            matRef = glGetUniformLocation( programId, tmp->name );
-            if(tmp->type == UniformLocDesc::TYPE_FOR_PVM){
-               mUniforms[PVM_U] =  matRef;
-            }
-            if(tmp->type == UniformLocDesc::TYPE_FOR_NORMAL){
-                mUniforms[NORMAL] = matRef;
-                tmp->uniforRef = matRef;
-            }
+        char* str = info->getUniformName(i);
+        if(str){
+            matRef = glGetUniformLocation(programId, str);
+            mShaderMap->setUniformMapValue(str,matRef);
         }else{
             break;
         }
@@ -57,49 +40,39 @@ int Shader::bindUniforms(UniformLocDesc**uniformDescs){
 
 
 void Shader::enableVertexAttributeArrays(){
-    for(int i = 0;i<MAX_DESC;i++){
-        if(attributes[i] != 0xff){
-            glEnableVertexAttribArray(attributes[i]);
-        }else{
-            break;
-        }
+    std::map<std::string,GLint>::iterator it = mShaderMap->vertexMap.begin();
+    std::map<std::string,GLint>::iterator endIt = mShaderMap->vertexMap.end();;
+    for(; it!=endIt; it++){
+       glEnableVertexAttribArray(it->second);
     }
 }
 void Shader::disableVertexAttributeArrays(){
-    for(int i = 0;i<MAX_DESC;i++){
-        if(attributes[i] != 0xff){
-            glDisableVertexAttribArray(attributes[i]);
-        }else{
-            break;
-        }
+    std::map<std::string,GLint>::iterator it = mShaderMap->vertexMap.begin();
+    std::map<std::string,GLint>::iterator endIt = mShaderMap->vertexMap.end();;
+    for(; it!=endIt; it++){
+       glDisableVertexAttribArray(it->second);
     }
 }
 
-int Shader::bindVertexAtrributes( VertexLocDesc**vertexDescs){
-    VertexLocDesc*tmp;
-    for(int i= 0;i<MAX_DESC;i++ ){
-        tmp = vertexDescs[i];
-        if(tmp){
+int Shader::bindVertexAtrributes(ShaderInfo* info){
 
-            qDebug()<<"VertexAtrributes name:"<<tmp->name;
-            //glBindAttribLocation(programId, tmp->local,  tmp->name);
-            attributes[i] = glGetAttribLocation(programId, tmp->name);
-            //attributes[i] = tmp->local;
+    GLuint vertexRef;
+    for(int i= 0;i<MAX_DESC;i++ ){
+        char* str = info->getVertexName(i);
+        if(str){
+            vertexRef = glGetAttribLocation(programId,str);
+            mShaderMap->setVertexMapValue(str,vertexRef);
         }else{
             break;
         }
-
     }
     return 0;
-
 }
 
 
 Shader::~Shader(){
-    for(int i=0;i<NUM_UNIFORM;i++){
-        mUniforms[i] = 0;
-    }
     if(programId > 0){
         GLSLCompiler::destroyProgram(programId);
     }
+    delete mShaderMap;
 }

@@ -12,15 +12,20 @@ int GLESFrame::frameInit(){
     if(mShader){
         return 0;
     }
-    mShaderInfo = onLoadShaderInfo();
+    ShaderInfo* mShaderInfo = onLoadShaderInfo();
     if(!mShader){
         mShader = new Shader;
     }
+    COMShaderProver* prover =NULL;
     if(!mShaderInfo){
-        COMShaderProver* prover = new COMShaderProver();
+        prover = new COMShaderProver();
         mShaderInfo = prover->getShaderInfo();
     }
-    ret = mShader->shaderInit(mShaderInfo);
+    mShaderMap = mShader->shaderInit(mShaderInfo);
+    if(mShader == NULL){
+        return  ret;
+    }
+    delete prover;
     return onFrameInit();
 }
 GLESFrame::~GLESFrame(){

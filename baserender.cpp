@@ -21,7 +21,10 @@ int BaseRender::init(){
         COMShaderProver* prover = new COMShaderProver();
         infos = prover->getShaderInfo();
     }
-    ret = mShader->shaderInit(infos);
+    mShaderMap = mShader->shaderInit(infos);
+    if(mShader != NULL){
+       ret = 0;
+    }
     qDebug()<<"init render end...";
     return ret;
 }

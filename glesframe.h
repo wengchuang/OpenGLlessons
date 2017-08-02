@@ -46,12 +46,12 @@ protected:
     virtual int onFrameInit(){return 0;}
     virtual ShaderInfo* onLoadShaderInfo(){return NULL;}
     virtual void renderSelf(int /*width*/, int /*height*/,void*){}
-    inline ShaderInfo* getShaderInfo(){
-        return mShaderInfo;
+    inline ShaderMap* getShaderMap(){
+        return mShaderMap;
     }
 private :
       Shader *mShader;
-      ShaderInfo*mShaderInfo;
+      ShaderMap*mShaderMap;
       typedef std::vector<FrameItem*>   ChildList;
       ChildList  childs;
 
