@@ -9,7 +9,7 @@ int GLES2WithGLU::initWindows(){
     int ret ;
     int x ,y,width,height;
     this->getWindowInfo(&x ,&y,&width,&height);
-    glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
     glutInitWindowPosition(x, y);
     glutInitWindowSize(width, height);
     glutCreateWindow(this->getTitle());

@@ -76,5 +76,10 @@ int TextureResource::resourceInitialize(){
     return 0;
 }
 int TextureResource::resourceUnInitialize(){
+    TextureMap::iterator itr = _textureMap.begin();
+    TextureMap::iterator endItr = _textureMap.end();
+    for(;itr != endItr;itr++){
+        glDeleteTextures(1,&((itr->second)._texture));
+    }
     return 0;
 }

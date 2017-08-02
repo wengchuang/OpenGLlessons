@@ -23,7 +23,8 @@ int main(int argc,char*argv[])
 #endif
 #if 1
     GLES2WithGLU* app = new GLES2WithGLU(argc,argv);
-    app->setWidowsArea(600,150,640, 480);
+    app->setWidowsArea(600,100,400, 800);
+    app->setWindowsTitle("ShootingApp");
     ShootingFrameGenerator* generator = new ShootingFrameGenerator;
     app->setGLESFrameGenerator(generator);
     app->exec();

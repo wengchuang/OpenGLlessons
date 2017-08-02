@@ -30,7 +30,6 @@ int AbsGLES2App::exec(){
     return errCode;
 }
 void AbsGLES2App::update(){
-    qDebug()<<"mWidth:"<<mWidth<<" mHeight:"<<mHeight;
     esFrame->onRender(mWidth,mHeight);
 }
 GLESAppContext* AbsGLES2App::getGLESAppContext(){

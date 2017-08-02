@@ -34,6 +34,7 @@ static void onResize(int width,int height){
     GLUWindowCallBacks::getInstance()->resizeCallBack(width,height);
 
 }
+
 static void onKeyEvent(unsigned char, int, int ){
 
 }
