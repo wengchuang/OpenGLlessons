@@ -27,6 +27,7 @@ namespace Vision{
         inline void setScale(const glm::vec3& scale)
        {
            this->scale  =   scale;
+           update();
        }
         inline const glm::vec3&    getScale() const
         {
@@ -35,18 +36,29 @@ namespace Vision{
         inline void  setRoteX(const float& angle)
         {
             rote.x += angle;
+            update();
         }
         inline void  setRoteY(const float& angle)
         {
             rote.y += angle;
+            update();
         }
         inline void  setRoteZ(const float& angle)
         {
             rote.z += angle;
+            update();
         }
         inline const glm::mat4&  getMatrix() const
         {
             return  local;
+        }
+        inline bool containPoint(glm::vec2& point){
+            glm::vec3 minPos = -glm::vec3(mSize.x*0.5f,mSize.y*0.5f,0.0f) + pos;
+            glm::vec3 maxPos = glm::vec3(mSize.x*0.5f,mSize.y*0.5f,0.0f) + pos;
+            return ((point.x >= minPos.x) &&
+                    (point.y >= minPos.y) &&
+                    (point.x <= maxPos.x) &&
+                    (point.y <= maxPos.y));
         }
     private:
         glm::vec3               pos;

@@ -1,4 +1,5 @@
 #include "gluwindowcallbacks.h"
+#include "iglinput.h"
 #if 0
 FGAPI void    FGAPIENTRY glutKeyboardFunc( void (* callback)( unsigned char, int, int ) );
 FGAPI void    FGAPIENTRY glutSpecialFunc( void (* callback)( int, int, int ) );
@@ -26,23 +27,55 @@ FGAPI void    FGAPIENTRY glutDialsFunc( void (* callback)( int, int ) );
 FGAPI void    FGAPIENTRY glutTabletMotionFunc( void (* callback)( int, int ) );
 FGAPI void    FGAPIENTRY glutTabletButtonFunc( void (* callback)( int, int, int, int ) );
 #endif
-
+GLUWindowCallBacks *gInstance = NULL;
 static void onDisplay(void){
-    GLUWindowCallBacks::getInstance()->update();
+    gInstance->update();
 }
 static void onResize(int width,int height){
-    GLUWindowCallBacks::getInstance()->resizeCallBack(width,height);
-
+    gInstance->resizeCallBack(width,height);
 }
 
 static void onKeyEvent(unsigned char ch, int, int ){
-    if(GLUWindowCallBacks::getInstance()){
-        IGLInput* mInput = GLUWindowCallBacks::getInstance()->getInput();
-        if(mInput){
-            mInput->onChar(ch);
-        }
+    IGLInput* mInput = gInstance->getInput();
+    if(mInput){
+        mInput->onChar(ch);
     }
 
+}
+static MouseButton BtnId(MouseButton::None);
+static void mouseFunCb(int button, int state, int x, int y){
+    IGLInput* mInput = gInstance->getInput();
+
+    switch (button) {
+    case GLUT_LEFT_BUTTON:
+        BtnId = MouseButton(MouseButton::Left);
+        break;
+    case GLUT_RIGHT_BUTTON:
+        BtnId = MouseButton(MouseButton::Right);
+    default:
+        break;
+    }
+
+
+    if(BtnId.toValue() != MouseButton::None){
+        switch (state) {
+        case GLUT_DOWN:
+            mInput->onMousePress(x, y,BtnId);
+            break;
+        case GLUT_UP:
+            mInput->onMouseRelease(x, y,BtnId);
+            BtnId = MouseButton(MouseButton::None);
+            break;
+        default:
+            break;
+        }
+    }
+}
+static void mouseMotionCB(int x, int y){
+    if(BtnId.toValue() != MouseButton::None){
+       IGLInput* mInput = gInstance->getInput();
+       mInput->onMouseMove(x,y,0);
+    }
 
 }
 GLUWindowCallBacks *GLUWindowCallBacks::instance = NULL;
@@ -51,12 +84,15 @@ GLUWindowCallBacks::GLUWindowCallBacks()
     glutDisplayFunc(onDisplay);
     glutReshapeFunc(onResize);
     glutKeyboardFunc(onKeyEvent);
+    glutMouseFunc(mouseFunCb);
+    glutMotionFunc(mouseMotionCB);
     mInput = NULL;
 
 }
 GLUWindowCallBacks* GLUWindowCallBacks::getInstance(){
     if(!instance){
         instance = new GLUWindowCallBacks;
+        gInstance = instance;
     }
     return instance;
 }

@@ -21,25 +21,25 @@ int ShootingFrame::onFrameInit(){
 
     player* p = new player(getShaderMap());
     addChild(p );
-
+    bTimerUpdate = true;
+#if 0
     p = new player(getShaderMap());
     glm::vec3 pos = glm::vec3(100,600,0);
     p->setPos(pos);
     addChild( p);
+#endif
 
-    mTimer = new Timer(500);
-    mTimer->setTimerFun(this,&ShootingFrame::onUpdate);
-    AbsGLES2App::getGLESAppContext()->getTimerManagerResource()->registerTimer(mTimer);
+   mTimer = new Timer(500);
+   mTimer->setTimerFun(this,&ShootingFrame::onUpdate);
+   AbsGLES2App::getGLESAppContext()->getTimerManagerResource()->registerTimer(mTimer);
 
-    bUpdate = false;
     return ret;
 }
 void ShootingFrame::onUpdate(){
     onRender(0 ,0);
-    bUpdate = true;
+    bTimerUpdate =true;
 }
 void ShootingFrame::renderSelf(int width ,int height){
-    glClearColor(0.0f,0.0f,0.0f,1.0f);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     if((width == 0) || (height == 0)){
         width = mWidth;
@@ -51,7 +51,6 @@ void ShootingFrame::renderSelf(int width ,int height){
     glViewport(0,0,width,height);
 
     mPVMat = glm::ortho(0.0f,(float)width,(float)height,0.0f);
-
     glUniformMatrix4fv(pvmMatRef,1,GL_FALSE,&mPVMat[0][0]);
     float   x   =   0;
     float   y   =   0;
@@ -65,10 +64,11 @@ void ShootingFrame::renderSelf(int width ,int height){
         x   ,   (y+h), 0,   0, 1+vv,
        (x+w),   (y+h), 0,   1, 1+vv
     };
-    if(bUpdate){
-        vv  +=  0.1f;
-        bUpdate = false;
+    if(bTimerUpdate){
+        vv  +=  0.01f;
+        bTimerUpdate = false;
     }
+
     glActiveTexture(GL_TEXTURE0 + 0);
     glBindTexture(GL_TEXTURE_2D,texture._texture);
     glUniform1i(uvUniformRef, 0);

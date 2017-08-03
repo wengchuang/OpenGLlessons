@@ -50,7 +50,7 @@ protected:
         return mShaderMap;
     }
     virtual glm::mat4& onGetPVMat(){
-        static glm::mat4 mat;
+        static glm::mat4 mat(1.0);
        return mat;
     }
     void addChild(FrameItem* item);

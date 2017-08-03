@@ -6,7 +6,7 @@ class IRenderable{
 public:
     virtual void onRender(int width,int height) = 0;
 };
-class IFrameItemRenderable{
+class IModelRenderable{
 public:
     virtual void onRender(int width,int height,const glm::mat4& pvMat) = 0;
 };

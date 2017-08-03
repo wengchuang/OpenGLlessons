@@ -31,7 +31,7 @@ private:
     Timer* mTimer;
     float mWidth ;
     float mHeight;
-    bool        bUpdate;
+    bool bTimerUpdate;
 };
 class ShootingFrameGenerator:public IGLESFrameGenerator{
 public:

@@ -4,7 +4,7 @@
 #include "IRenderable.h"
 #include "shader.h"
 
-class FrameItem : public IGLInput,public IFrameItemRenderable
+class FrameItem : public IGLInput,public IModelRenderable
 {
 public:
     FrameItem(ShaderMap* shaderMap){

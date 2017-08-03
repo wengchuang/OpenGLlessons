@@ -13,8 +13,6 @@ int GLES2WithGLU::initWindows(){
     glutInitWindowPosition(x, y);
     glutInitWindowSize(width, height);
     glutCreateWindow(this->getTitle());
-
-
     ret =  glewInit();
     if(ret == 0){
         GLUWindowCallBacks::getInstance()->setUpdateFun<GLES2WithGLU,void>(this,&GLES2WithGLU::update);

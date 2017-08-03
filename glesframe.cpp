@@ -60,7 +60,7 @@ void GLESFrame::onMouseMove(int absx, int absy, int  absz){
         item->onMouseMove(absx,absy,absz);
         ++itr;
     }
-    onRender(0,0);
+    //onRender(0,0);
 }
 
 void GLESFrame::onMousePress(int absx, int absy, MouseButton id){

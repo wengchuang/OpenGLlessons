@@ -13,11 +13,13 @@ player::player(ShaderMap* shaderMap):FrameItem(shaderMap)
     _nodeBody.setPosition(glm::vec3(200,100,0));
     _nodeBody.update();
     mShaderMap = shaderMap;
+    bLeftPress = false;
 }
 void player::setPos(glm::vec3& pos){
     _nodeBody.setPosition(pos);
 }
 void player::onRender(int width,int height,const glm::mat4& pvMat){
+
     glActiveTexture(GL_TEXTURE0 + 0);
     glBindTexture(GL_TEXTURE_2D,_plant._texture);
 
@@ -51,20 +53,20 @@ void player::onChar(int ch){
     case 'A' :
         pos = _nodeBody.getPosition();
         pos.x -= 10;
-        _nodeBody.setPosition(pos);
+        setPos(pos);
         break;
     case 'd' :
     case 'D' :
         pos = _nodeBody.getPosition();
         pos.x += 10;
-        _nodeBody.setPosition(pos);
+       setPos(pos);
         break;
 
     case 'w' :
     case 'W' :
         pos = _nodeBody.getPosition();
         pos.y -= 10;
-        _nodeBody.setPosition(pos);
+        setPos(pos);
         break;
 
 
@@ -73,7 +75,25 @@ void player::onChar(int ch){
 
         pos = _nodeBody.getPosition();
         pos.y += 10;
-        _nodeBody.setPosition(pos);
+        setPos(pos);
         break;
     }
+}
+void player::onMousePress(int x, int y, MouseButton btnID){
+    if(btnID.toValue() == MouseButton::Left){
+        glm::vec2 point = glm::vec2(x,y);
+        if(_nodeBody.containPoint(point)){
+            bLeftPress = true;
+        }
+    }
+}
+void player::onMouseRelease(int x, int y, MouseButton btnID){
+    if(bLeftPress && (btnID.toValue() == MouseButton::Left)){
+        glm::vec3 pos = glm::vec3(x,y,0);
+        setPos(pos);
+        bLeftPress =false;
+    }
+}
+void player::onMouseMove(int x, int y , int z){
+
 }
