@@ -18,6 +18,7 @@ int AbsGLES2App::exec(){
                     esFrame = generator->generateGLESFrame();
                     errCode = esFrame->frameInit();
                     if(!errCode){
+                        onInputDeviceChanaged(esFrame);
                         errCode = mainLoop();
                     }
                     delete esFrame;

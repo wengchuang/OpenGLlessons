@@ -31,16 +31,26 @@ int GLESFrame::frameInit(){
 GLESFrame::~GLESFrame(){
     delete mShader;
 }
-void GLESFrame::onRender(int width, int height,void*usrData){
-    renderSelf(width,height,usrData);
+void GLESFrame::onRender(int width, int height){
+    mShader->bindShader();
+    renderSelf(width,height);
+
+
     ChildList::iterator itr = childs.begin();
     for ( ;itr != childs.end() ; )
     {
         FrameItem* item  =   *itr;
-        item->onRender(width,height,usrData);
+        item->onRender(width,height,onGetPVMat());
         ++itr;
     }
 
+    mShader->unbindShader();
+    glutSwapBuffers();
+
+}
+void GLESFrame::addChild(FrameItem* item){
+    if(item)
+        childs.push_back(item);
 }
 void GLESFrame::onMouseMove(int absx, int absy, int  absz){
     ChildList::iterator itr = childs.begin();
@@ -50,6 +60,7 @@ void GLESFrame::onMouseMove(int absx, int absy, int  absz){
         item->onMouseMove(absx,absy,absz);
         ++itr;
     }
+    onRender(0,0);
 }
 
 void GLESFrame::onMousePress(int absx, int absy, MouseButton id){
@@ -60,6 +71,7 @@ void GLESFrame::onMousePress(int absx, int absy, MouseButton id){
         item->onMousePress(absx,absy,id);
         ++itr;
     }
+    onRender(0,0);
 }
 /**
 *   鼠标双击
@@ -72,6 +84,7 @@ void GLESFrame::onMouseDbPress(int absx, int absy, MouseButton id){
         item->onMouseDbPress(absx,absy,id);
         ++itr;
     }
+    onRender(0,0);
 }
 /**
 *   鼠标释放
@@ -84,6 +97,7 @@ void GLESFrame::onMouseRelease(int absx, int absy, MouseButton id){
         item->onMouseRelease(absx,absy,id);
         ++itr;
     }
+    onRender(0,0);
 }
 /**
 *   键盘按下
@@ -96,6 +110,7 @@ void GLESFrame::onKeyPress(KeyCode key, int text){
         item->onKeyPress(key,text);
         ++itr;
     }
+    onRender(0,0);
 }
 /**
 *   键盘抬起
@@ -108,6 +123,7 @@ void GLESFrame::onKeyRelease(KeyCode key){
         item->onKeyRelease(key);
         ++itr;
     }
+    onRender(0,0);
 }
 /**
 *   输入
@@ -120,4 +136,5 @@ void GLESFrame::onChar(int ch){
         item->onChar(ch);
         ++itr;
     }
+    onRender(0,0);
 }

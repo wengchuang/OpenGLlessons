@@ -11,7 +11,7 @@ class GLESFrame : public AbsGLFrame
 public:
     int frameInit();
     virtual ~GLESFrame();
-    virtual void onRender(int width, int height,void*usrData = NULL);
+    virtual void onRender(int width, int height);
     virtual void onMouseMove(int absx, int absy, int  absz);
 
     virtual void onMousePress(int absx, int absy, MouseButton id);
@@ -45,10 +45,15 @@ protected:
     }
     virtual int onFrameInit(){return 0;}
     virtual ShaderInfo* onLoadShaderInfo(){return NULL;}
-    virtual void renderSelf(int /*width*/, int /*height*/,void*){}
+    virtual void renderSelf(int /*width*/, int /*height*/){}
     inline ShaderMap* getShaderMap(){
         return mShaderMap;
     }
+    virtual glm::mat4& onGetPVMat(){
+        static glm::mat4 mat;
+       return mat;
+    }
+    void addChild(FrameItem* item);
 private :
       Shader *mShader;
       ShaderMap*mShaderMap;

@@ -8,28 +8,30 @@ class ShootingFrame : public GLESFrame
 {
     friend class ShootingFrameGenerator;
 public:
-    ~ShootingFrame(){
-        delete mShaderInfo;
-        delete mTimer;
-    }
+    ~ShootingFrame();
 protected:
     ShootingFrame(){mShaderInfo= NULL;
                     mTimer = NULL;
                    }
 protected:
     ShaderInfo* onLoadShaderInfo();
-    void renderSelf(int width, int height,void*usrData);
+    void renderSelf(int width, int height);
     int onFrameInit();
+    glm::mat4& onGetPVMat(){
+        return mPVMat;
+    }
 private:
-    void onRender();
+    void onUpdate();
 private:
     Texture2dId    texture;
     GLint          pvmMatRef;
     GLint          uvUniformRef;
     ShaderInfo*    mShaderInfo;
+    glm::mat4      mPVMat;
     Timer* mTimer;
     float mWidth ;
     float mHeight;
+    bool        bUpdate;
 };
 class ShootingFrameGenerator:public IGLESFrameGenerator{
 public:

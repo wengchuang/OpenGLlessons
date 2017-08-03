@@ -35,7 +35,14 @@ static void onResize(int width,int height){
 
 }
 
-static void onKeyEvent(unsigned char, int, int ){
+static void onKeyEvent(unsigned char ch, int, int ){
+    if(GLUWindowCallBacks::getInstance()){
+        IGLInput* mInput = GLUWindowCallBacks::getInstance()->getInput();
+        if(mInput){
+            mInput->onChar(ch);
+        }
+    }
+
 
 }
 GLUWindowCallBacks *GLUWindowCallBacks::instance = NULL;
@@ -44,6 +51,7 @@ GLUWindowCallBacks::GLUWindowCallBacks()
     glutDisplayFunc(onDisplay);
     glutReshapeFunc(onResize);
     glutKeyboardFunc(onKeyEvent);
+    mInput = NULL;
 
 }
 GLUWindowCallBacks* GLUWindowCallBacks::getInstance(){
