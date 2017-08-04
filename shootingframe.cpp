@@ -9,7 +9,6 @@
 #include "absgles2app.h"
 #include "player.h"
 
-
 int ShootingFrame::onFrameInit(){
     int ret = 0;
     glEnable(GL_BLEND|GL_DOUBLE);
@@ -29,7 +28,7 @@ int ShootingFrame::onFrameInit(){
     addChild( p);
 #endif
 
-   mTimer = new Timer(500);
+   mTimer = new Timer(100);
    mTimer->setTimerFun(this,&ShootingFrame::onUpdate);
    AbsGLES2App::getGLESAppContext()->getTimerManagerResource()->registerTimer(mTimer);
 

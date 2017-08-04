@@ -8,8 +8,9 @@ namespace Vision{
     {
     public:
         VisionNode(void* user=0);
-        void setSize(glm::vec2& size);
+        void setSize(const glm::vec2& size);
         void update();
+
         glm::vec2  getSize() const
         {
             return  mSize;
@@ -18,7 +19,7 @@ namespace Vision{
         inline void setPosition(const glm::vec3& pos)
         {
             this->pos    =   pos;
-            update();
+            bNeedUpdate  =  true;
         }
         inline const glm::vec3& getPosition() const
         {
@@ -27,7 +28,7 @@ namespace Vision{
         inline void setScale(const glm::vec3& scale)
        {
            this->scale  =   scale;
-           update();
+           bNeedUpdate  =  true;
        }
         inline const glm::vec3&    getScale() const
         {
@@ -36,17 +37,17 @@ namespace Vision{
         inline void  setRoteX(const float& angle)
         {
             rote.x += angle;
-            update();
+            bNeedUpdate  =  true;
         }
         inline void  setRoteY(const float& angle)
         {
             rote.y += angle;
-            update();
+            bNeedUpdate  =  true;
         }
         inline void  setRoteZ(const float& angle)
         {
             rote.z += angle;
-            update();
+            bNeedUpdate  =  true;
         }
         inline const glm::mat4&  getMatrix() const
         {
@@ -67,6 +68,7 @@ namespace Vision{
         glm::vec2               mSize;
         glm::mat4               local;
         AxisAlignedBox<float>   alBox;
+        bool                    bNeedUpdate;
     private:
         inline glm::mat4 getModelMatrix()const{
             glm::mat4 model = glm::mat4(1.0f);

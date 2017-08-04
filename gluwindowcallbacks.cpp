@@ -82,6 +82,7 @@ GLUWindowCallBacks *GLUWindowCallBacks::instance = NULL;
 GLUWindowCallBacks::GLUWindowCallBacks()
 {
     glutDisplayFunc(onDisplay);
+    glutIdleFunc(onDisplay);
     glutReshapeFunc(onResize);
     glutKeyboardFunc(onKeyEvent);
     glutMouseFunc(mouseFunCb);

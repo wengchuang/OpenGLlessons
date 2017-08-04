@@ -5,6 +5,9 @@ GLES2WithGLU::GLES2WithGLU(int argc ,char**argv)
 {
     glutInit(&argc, argv);
 }
+
+
+
 int GLES2WithGLU::initWindows(){
     int ret ;
     int x ,y,width,height;

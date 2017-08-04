@@ -10,6 +10,7 @@ public:
     FrameItem(ShaderMap* shaderMap){
         mShaderMap = shaderMap;
     }
+    virtual ~FrameItem(){}
     virtual void    onMouseMove(int /*absx*/, int /*absy*/, int/*absz*/){}
     /**
     *   鼠标按下

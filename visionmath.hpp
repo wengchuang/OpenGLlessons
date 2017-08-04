@@ -5,6 +5,101 @@
 namespace Vision{
 
 
+    template <typename T>
+    typename glm::tvec2<T>::value_type length(glm::tvec2<T> const & v)
+    {
+        typename glm::tvec2<T>::value_type sqr = v.x * v.x + v.y * v.y;
+        return sqrt(sqr);
+    }
+
+    template <typename T>
+    typename glm::tvec3<T>::value_type length(glm::tvec3<T> const & v)
+    {
+        typename glm::tvec3<T>::value_type sqr = v.x * v.x + v.y * v.y + v.z * v.z;
+        return sqrt(sqr);
+    }
+
+    template <typename T>
+    typename glm::tvec4<T>::value_type length(glm::tvec4<T> const & v)
+    {
+        typename glm::tvec4<T>::value_type sqr = v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w;
+        return sqrt(sqr);
+    }
+    template <typename T>
+    typename glm::tvec2<T>::value_type distance(glm::tvec2<T> const & p0,glm::tvec2<T> const & p1)
+    {
+        return length(p1 - p0);
+    }
+
+    template <typename T>
+    typename glm::tvec3<T>::value_type distance(glm::tvec3<T> const & p0,glm::tvec3<T> const & p1)
+    {
+        return length(p1 - p0);
+    }
+
+    template <typename T>
+    typename glm::tvec4<T>::value_type distance(glm::tvec4<T> const & p0,glm::tvec4<T> const & p1)
+    {
+        return length(p1 - p0);
+    }
+
+    template <typename T>
+    typename glm::tvec2<T>::value_type dot(glm::tvec2<T> const & x, glm::tvec2<T> const & y)
+    {
+        return x.x * y.x + x.y * y.y;
+    }
+
+    template <typename T>
+    typename glm::tvec3<T>::value_type dot(glm::tvec3<T> const & x, glm::tvec3<T> const & y)
+    {
+        return x.x * y.x + x.y * y.y + x.z * y.z;
+    }
+    template <typename T>
+    typename glm::tvec4<T>::value_type dot(glm::tvec4<T> const & x, glm::tvec4<T> const & y)
+    {
+        return x.x * y.x + x.y * y.y + x.z * y.z + x.w * y.w;
+    }
+
+    template <typename T>
+    glm::tvec3<T> cross(glm::tvec3<T> const & x, glm::tvec3<T> const & y)
+    {
+        return  glm::tvec3<T>
+                (
+                x.y * y.z - y.y * x.z,
+                x.z * y.x - y.z * x.x,
+                x.x * y.y - y.x * x.y
+                );
+    }
+
+    template <typename T>
+    T inversesqrt(T x)
+    {
+        return T(1) / sqrt(x);
+    }
+
+    template <typename T>
+    glm::tvec2<T> normalize(glm::tvec2<T> const & x)
+    {
+        typename glm::tvec2<T>::value_type sqr = x.x * x.x + x.y * x.y;
+        return x * inversesqrt(sqr);
+    }
+
+    template <typename T>
+    glm::tvec3<T> normalize(glm::tvec3<T> const & x)
+    {
+        typename glm::tvec3<T>::value_type sqr = x.x * x.x + x.y * x.y + x.z * x.z;
+        return x * inversesqrt(sqr);
+    }
+
+    template <typename T>
+    glm::tvec4<T> normalize(glm::tvec4<T> const & x)
+    {
+        typename glm::tvec4<T>::value_type sqr = x.x * x.x + x.y * x.y + x.z * x.z + x.w * x.w;
+        return x * inversesqrt(sqr);
+    }
+
+
+
 
 template<typename T>
 class   AxisAlignedBox

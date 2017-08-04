@@ -9,18 +9,23 @@ VisionNode::VisionNode(void* user)
     glm::vec2 size = glm::vec2(8,8);
     setSize(size);
     user = user;
+    bNeedUpdate = false;
 }
-void VisionNode::setSize(glm::vec2& size){
+void VisionNode::setSize(const glm::vec2& size){
     mSize = size;
     glm::vec3 minPos = -glm::vec3(size.x*0.5f,size.y*0.5f,0.0f);
     glm::vec3 maxPos = glm::vec3(size.x*0.5f,size.y*0.5f,0.0f);
     alBox.setExtents(minPos,maxPos);
     alBox.transform(local);
+
 }
 void VisionNode::update()
 {
-    local  =   getModelMatrix();
-    setSize(mSize);
+    if(bNeedUpdate){
+        local  =   getModelMatrix();
+        setSize(mSize);
+        bNeedUpdate = false;
+    }
 }
 
 }

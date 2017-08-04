@@ -25,7 +25,7 @@ class TextureResource : public IResourceItem
 {
     typedef std::map<std::string,Texture2dId>   TextureMap;
 public:
-    Texture2dId getTexture(char* texture);
+    Texture2dId getTexture(const char* texture);
     int resourceInitialize();
     int resourceUnInitialize();
 private:

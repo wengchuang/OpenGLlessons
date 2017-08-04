@@ -1,6 +1,6 @@
 #include "textureresource.h"
 
-Texture2dId TextureResource::getTexture(char* texture){
+Texture2dId TextureResource::getTexture(const char* texture){
     TextureMap::iterator itr = _textureMap.find(texture);
     if (itr == _textureMap.end())
     {

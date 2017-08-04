@@ -10,8 +10,9 @@ class ShootingFrame : public GLESFrame
 public:
     ~ShootingFrame();
 protected:
-    ShootingFrame(){mShaderInfo= NULL;
-                    mTimer = NULL;
+    ShootingFrame(){
+        mShaderInfo= NULL;
+        mTimer = NULL;
                    }
 protected:
     ShaderInfo* onLoadShaderInfo();

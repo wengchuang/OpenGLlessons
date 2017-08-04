@@ -29,7 +29,14 @@ int GLESFrame::frameInit(){
     return onFrameInit();
 }
 GLESFrame::~GLESFrame(){
+    for(ChildList::iterator it  = childs.begin(); it != childs.end(); )
+    {
+         FrameItem* item  =   *it;
+         it = childs.erase(it);
+         delete item;
+    }
     delete mShader;
+
 }
 void GLESFrame::onRender(int width, int height){
     mShader->bindShader();
@@ -60,7 +67,7 @@ void GLESFrame::onMouseMove(int absx, int absy, int  absz){
         item->onMouseMove(absx,absy,absz);
         ++itr;
     }
-    //onRender(0,0);
+
 }
 
 void GLESFrame::onMousePress(int absx, int absy, MouseButton id){
@@ -71,7 +78,6 @@ void GLESFrame::onMousePress(int absx, int absy, MouseButton id){
         item->onMousePress(absx,absy,id);
         ++itr;
     }
-    onRender(0,0);
 }
 /**
 *   鼠标双击
@@ -84,7 +90,6 @@ void GLESFrame::onMouseDbPress(int absx, int absy, MouseButton id){
         item->onMouseDbPress(absx,absy,id);
         ++itr;
     }
-    onRender(0,0);
 }
 /**
 *   鼠标释放
@@ -97,7 +102,6 @@ void GLESFrame::onMouseRelease(int absx, int absy, MouseButton id){
         item->onMouseRelease(absx,absy,id);
         ++itr;
     }
-    onRender(0,0);
 }
 /**
 *   键盘按下
@@ -110,7 +114,6 @@ void GLESFrame::onKeyPress(KeyCode key, int text){
         item->onKeyPress(key,text);
         ++itr;
     }
-    onRender(0,0);
 }
 /**
 *   键盘抬起
@@ -123,7 +126,6 @@ void GLESFrame::onKeyRelease(KeyCode key){
         item->onKeyRelease(key);
         ++itr;
     }
-    onRender(0,0);
 }
 /**
 *   输入
@@ -136,5 +138,4 @@ void GLESFrame::onChar(int ch){
         item->onChar(ch);
         ++itr;
     }
-    onRender(0,0);
 }
