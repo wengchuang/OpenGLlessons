@@ -11,7 +11,7 @@ player::player(ShaderMap* shaderMap):FrameItem(shaderMap)
     _plant =   AbsGLES2App::getGLESAppContext()->getTextureResource()->getTexture("./data/image/plane1.tex");
     glm::vec2 size = glm::vec2(_plant._width,_plant._height);
     _nodeBody.setSize(size);
-    _nodeBody.setPosition(glm::vec3(200,100,0));
+    _nodeBody.setPosition(glm::vec3(200,500,0));
     mShaderMap = shaderMap;
     bLeftPress = false;
     times      = 0;
@@ -34,7 +34,7 @@ void player::addBullet(){
     bullet  =   new Bullet(mShaderMap,200,times);
     pos.x += (_nodeBody.getSize() * 0.5f).x;
     bullet->setPosition(pos);
-    bullet->setDir(glm::vec3(-0.5,-1,0));
+    bullet->setDir(glm::vec3(0,-1,0));
     bullet->setSize(glm::vec2(16,16));
     bullet->setMaxDistance(500);
     bullet->setSpeed(5.0f);
@@ -45,10 +45,10 @@ void player::addBullet(){
     bullet  =   new Bullet(mShaderMap,200,times);
     pos.x -= (_nodeBody.getSize() * 0.5f).x;
     bullet->setPosition(pos);
-    bullet->setDir(glm::vec3(0.5,-1,0));
+    bullet->setDir(glm::vec3(0,-1,0));
     bullet->setSize(glm::vec2(16,16));
     bullet->setMaxDistance(500);
-    bullet->setSpeed(3.0f);
+    bullet->setSpeed(5.0f);
     bulletList.push_back(bullet);
 }
 void player::setPos(glm::vec3& pos){
@@ -75,7 +75,7 @@ void player::renderChildren(const glm::mat4& pvMat){
 }
 void player::onRender(int width,int height,const glm::mat4& pvMat){
 
-    glActiveTexture(GL_TEXTURE0 + 0);
+    //glActiveTexture(GL_TEXTURE0 + 0);
     glBindTexture(GL_TEXTURE_2D,_plant._texture);
 
     _nodeBody.update();
@@ -90,10 +90,11 @@ void player::onRender(int width,int height,const glm::mat4& pvMat){
         vMin.x,vMax.y,0,    0,1,
         vMax.x,vMax.y,0,    1,1
     };
-
+    static GLint matRef = mShaderMap->getUniformRef("pvmMat");
+    static GLint textureRef = mShaderMap->getUniformRef("_texture");
     glm::mat4   mvp     =   pvMat * _nodeBody.getMatrix();
-    glUniformMatrix4fv(mShaderMap->getUniformRef("pvmMat"), 1, false, &mvp[0][0]);
-    glUniform1i(mShaderMap->getUniformRef("_texture"),0);
+    glUniformMatrix4fv(matRef, 1, false, &mvp[0][0]);
+    glUniform1i(textureRef,0);
     glVertexAttribPointer(0,  3,  GL_FLOAT,   false,  5*sizeof(float),vert);
     glVertexAttribPointer(1,  2,  GL_FLOAT,   false, 5*sizeof(float),&vert[3]);
     glDrawArrays(GL_TRIANGLE_STRIP,0,4);

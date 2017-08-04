@@ -11,7 +11,7 @@
 
 int ShootingFrame::onFrameInit(){
     int ret = 0;
-    glEnable(GL_BLEND|GL_DOUBLE);
+    glEnable(GL_BLEND|GL_DOUBLE|GL_ALPHA_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     pvmMatRef = getShaderMap()->getUniformRef("pvmMat");
     uvUniformRef = getShaderMap()->getUniformRef("_uv");
@@ -35,11 +35,12 @@ int ShootingFrame::onFrameInit(){
     return ret;
 }
 void ShootingFrame::onUpdate(){
-    onRender(0 ,0);
     bTimerUpdate =true;
+    onRender(0 ,0);
 }
 void ShootingFrame::renderSelf(int width ,int height){
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
     if((width == 0) || (height == 0)){
         width = mWidth;
         height = mHeight;
@@ -56,6 +57,10 @@ void ShootingFrame::renderSelf(int width ,int height){
     float   w   =   (float)mWidth;
     float   h   =   (float)mHeight;
     static  float   vv  =   0;
+    if(bTimerUpdate){
+        vv  +=  0.02f;
+        bTimerUpdate = false;
+    }
     GLfloat vert[]   =
     {
         x,      y,     0,   0, vv,
@@ -63,10 +68,7 @@ void ShootingFrame::renderSelf(int width ,int height){
         x   ,   (y+h), 0,   0, 1+vv,
        (x+w),   (y+h), 0,   1, 1+vv
     };
-    if(bTimerUpdate){
-        vv  +=  0.01f;
-        bTimerUpdate = false;
-    }
+
 
     glActiveTexture(GL_TEXTURE0 + 0);
     glBindTexture(GL_TEXTURE_2D,texture._texture);

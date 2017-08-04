@@ -154,7 +154,7 @@ public:
         int ret = -1;
         if(programId > 0){
             disableVertexAttributeArrays();
-            //glUseProgram(0);
+            glUseProgram(0);
             ret = 0;
         }
         return ret;

@@ -17,7 +17,7 @@ void Bullet::onRender(int width, int height, const glm::mat4 &pvMat){
         return;
     }
     bulletBody.update();
-    glActiveTexture(GL_TEXTURE0 + 0);
+    //glActiveTexture(GL_TEXTURE0 + 0);
     glBindTexture(GL_TEXTURE_2D,_texture._texture);
 
     glm::vec2    halfSz  =   bulletBody.getSize() * 0.5f;
@@ -31,10 +31,12 @@ void Bullet::onRender(int width, int height, const glm::mat4 &pvMat){
         vMin.x,vMax.y,0,    0,1,
         vMax.x,vMax.y,0,    1,1
     };
+    static GLint matRef = mShaderMap->getUniformRef("pvmMat");
+    static GLint textureRef = mShaderMap->getUniformRef("_texture");
 
     glm::mat4   mvp     =   pvMat * bulletBody.getMatrix();
-    glUniformMatrix4fv(mShaderMap->getUniformRef("pvmMat"), 1, false, &mvp[0][0]);
-    glUniform1i(mShaderMap->getUniformRef("_texture"),0);
+    glUniformMatrix4fv(matRef, 1, false, &mvp[0][0]);
+    glUniform1i(textureRef,0);
     glVertexAttribPointer(0,  3,  GL_FLOAT,   false,  5*sizeof(float),vert);
     glVertexAttribPointer(1,  2,  GL_FLOAT,   false, 5*sizeof(float),&vert[3]);
 
@@ -72,6 +74,4 @@ void Bullet::update()
   glm::vec3 pos = bulletBody.getPosition();
   pos    +=  _dir * (_attrSpeed * (this->curTime-this->beginTimes));
   bulletBody.setPosition(pos);
-
-  //CELLNode::update(elasped,force);
 }

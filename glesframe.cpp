@@ -41,8 +41,6 @@ GLESFrame::~GLESFrame(){
 void GLESFrame::onRender(int width, int height){
     mShader->bindShader();
     renderSelf(width,height);
-
-
     ChildList::iterator itr = childs.begin();
     for ( ;itr != childs.end() ; )
     {
@@ -53,7 +51,6 @@ void GLESFrame::onRender(int width, int height){
 
     mShader->unbindShader();
     glutSwapBuffers();
-
 }
 void GLESFrame::addChild(FrameItem* item){
     if(item)

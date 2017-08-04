@@ -42,14 +42,14 @@ int Shader::bindUniforms(ShaderInfo* info){
 void Shader::enableVertexAttributeArrays(){
     std::map<std::string,GLint>::iterator it = mShaderMap->vertexMap.begin();
     std::map<std::string,GLint>::iterator endIt = mShaderMap->vertexMap.end();;
-    for(; it!=endIt; it++){
+    for(; it!=endIt; ++it){
        glEnableVertexAttribArray(it->second);
     }
 }
 void Shader::disableVertexAttributeArrays(){
     std::map<std::string,GLint>::iterator it = mShaderMap->vertexMap.begin();
     std::map<std::string,GLint>::iterator endIt = mShaderMap->vertexMap.end();;
-    for(; it!=endIt; it++){
+    for(; it!=endIt; ++it){
        glDisableVertexAttribArray(it->second);
     }
 }
