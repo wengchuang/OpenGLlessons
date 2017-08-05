@@ -1,7 +1,9 @@
 #ifndef BASERENDER_H
 #define BASERENDER_H
+#ifdef UBUNTU_WITH_GL
 #include <GL/glew.h>
 #include <QtGlobal>
+#endif
 #include <glm/glm.hpp>
 #include <QList>
 #include "shader.h"
@@ -34,7 +36,9 @@ protected:
                           const glm::mat4& modelMat) = 0;
     inline const GLuint& getVertArrObj(){
         if(mVertArrObj == 0){
+#ifdef UBUNTU_WITH_GL
             glGenVertexArrays(1,&mVertArrObj);
+#endif
         }
         return mVertArrObj;
     }
@@ -44,9 +48,7 @@ protected:
         }
         return mVertArrBuffers[type];
     }
-private:
-    //这里封装函数 为了屏蔽刷新的差异
-    void commitUpdate();
+
 private:
     Shader*    mShader;
     ShaderMap* mShaderMap;

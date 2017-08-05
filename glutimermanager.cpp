@@ -1,3 +1,5 @@
+#ifdef UBUNTU_WITH_GL
+
 #include "glutimermanager.h"
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -47,3 +49,4 @@ int GLUTimerManager::unregisterTimer(Timer* timer){
 GLUTimerManager::~GLUTimerManager(){
     delete this->timerMap;
 }
+#endif

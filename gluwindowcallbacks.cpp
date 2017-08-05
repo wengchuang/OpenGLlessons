@@ -1,3 +1,5 @@
+#ifdef UBUNTU_WITH_GL
+
 #include "gluwindowcallbacks.h"
 #include "iglinput.h"
 #if 0
@@ -97,3 +99,4 @@ GLUWindowCallBacks* GLUWindowCallBacks::getInstance(){
     }
     return instance;
 }
+#endif

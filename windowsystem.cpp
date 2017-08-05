@@ -1,6 +1,9 @@
+#ifdef UBUNTU_WITH_GL
 #include "windowsystem.h"
 #include <GL/glew.h>
 #include <GL/glut.h>
+
+
 
 WindowSystem::WindowSystem(int argc,char*argv[],const char* winTitle)
 {
@@ -29,3 +32,4 @@ int WindowSystem::exec(){
     glutMainLoop();
     return 0;
 }
+#endif

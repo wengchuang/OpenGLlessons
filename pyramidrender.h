@@ -1,6 +1,14 @@
 #ifndef PYRAMIDMESH_H
 #define PYRAMIDMESH_H
+#ifdef UBUNTU_WITH_GL
 #include <GL/glew.h>
+#include <GL/glut.h>
+#endif
+#ifdef WIN_WITH_OPENGL_ES2
+typedef int GLint;
+typedef unsigned int GLuint;
+#include <gles2/gl2.h>
+#endif
 #include <QVector>
 #include <glm/glm.hpp>
 #include "baserender.h"

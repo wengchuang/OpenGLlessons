@@ -1,3 +1,4 @@
+#ifdef UBUNTU_WITH_GL
 #include "windowadapter.h"
 #include "trianglerender.h"
 #include "pyramidrender.h"
@@ -92,3 +93,4 @@ struct WindowAdapter*getWindowAdapter(){
 
     return (WindowAdapter*)&cusAdapter;
 }
+#endif

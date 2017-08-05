@@ -1,3 +1,6 @@
+#ifdef UBUNTU_WITH_GL
+
+
 #ifndef GLUTIMERMANAGER_H
 #define GLUTIMERMANAGER_H
 #include "itimermanager.h"
@@ -26,3 +29,4 @@ private:
 };
 
 #endif // GLUTIMERMANAGER_H
+#endif

@@ -1,3 +1,5 @@
+#ifdef UBUNTU_WITH_GL
+
 #include "gles2withglu.h"
 #include "gluwindowcallbacks.h"
 #include <QDebug>
@@ -48,3 +50,4 @@ int GLES2WithGLU::onInitOpenGLES(){
 void GLES2WithGLU::onDestroyOpenGLES(){
     return ;
 }
+#endif

@@ -1,6 +1,13 @@
 #include "baserender.h"
+#ifdef UBUNTU_WITH_GL
 #include <GL/glew.h>
 #include <GL/glut.h>
+#endif
+#ifdef WIN_WITH_OPENGL_ES2
+typedef int GLint;
+typedef unsigned int GLuint;
+#include <gles2/gl2.h>
+#endif
 #include <QDebug>
 #include "comshaderprover.h"
 BaseRender::BaseRender(IRenderObserver* observer)
@@ -40,21 +47,25 @@ void BaseRender::update(IRenderObserver* observer){
             mShader->bindShader();
             onUpdate(mShader,tmpObserver->observerViewMatrix(),
                  tmpObserver->observerModelMatrix());
-            commitUpdate();
+             glFlush();
            // mShader->unbindShader();
         }
     }
 
 }
-void BaseRender::commitUpdate(){
-     glFlush();
-}
+
 BaseRender::~BaseRender(){
     if(mVertArrBuffers[0] > 0){
+#ifdef UBUNTU_WITH_GL
+
          glDeleteBuffers(NUM_BUFFERS,mVertArrBuffers);
+#endif
     }
 
     if(mVertArrObj > 0){
+    #ifdef UBUNTU_WITH_GL
+
         glDeleteVertexArrays(1,&mVertArrObj);
+#endif
     }
 }

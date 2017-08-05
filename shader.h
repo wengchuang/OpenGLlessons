@@ -1,7 +1,15 @@
 #ifndef SHADERLODER_H
 #define SHADERLODER_H
+#ifdef UBUNTU_WITH_GL
 #include <GL/glew.h>
 #include <GL/glut.h>
+#endif
+#ifdef WIN_WITH_OPENGL_ES2
+typedef int GLint;
+typedef unsigned int GLuint;
+#include <gles2/gl2.h>
+#endif
+
 #include <glm/glm.hpp>
 #include <list>
 #include <QDebug>

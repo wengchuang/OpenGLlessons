@@ -21,7 +21,7 @@ int main(int argc,char*argv[])
     adapter->adapterUninit();
     delete win;
 #endif
-#if 1
+#ifdef UBUNTU_WITH_GL
     GLES2WithGLU* app = new GLES2WithGLU(argc,argv);
     app->setWidowsArea(600,100,400, 800);
     app->setWindowsTitle("ShootingApp");

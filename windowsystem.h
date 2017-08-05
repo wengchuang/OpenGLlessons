@@ -1,3 +1,4 @@
+#ifdef UBUNTU_WITH_GL
 #ifndef WINDOWSYSTEM_H
 #define WINDOWSYSTEM_H
 #include <QString>
@@ -21,4 +22,6 @@ private:
     WindowEventCallBacks* callBacks;
 };
 
+
 #endif // WINDOWSYSTEM_H
+#endif

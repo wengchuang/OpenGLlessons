@@ -1,5 +1,13 @@
 #include "camera.h"
+#ifdef UBUNTU_WITH_GL
 #include <GL/glew.h>
+#include <GL/glut.h>
+#endif
+#ifdef WIN_WITH_OPENGL_ES2
+typedef int GLint;
+typedef unsigned int GLuint;
+#include <gles2/gl2.h>
+#endif
 Camera::Camera(){
     this->pos = glm::vec3(0,0,5.0f);
     this->forword = glm::vec3(0.0f,.0f,0.0f);

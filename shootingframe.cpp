@@ -1,7 +1,14 @@
 #include "shootingframe.h"
 #include "shader.h"
+#ifdef UBUNTU_WITH_GL
 #include <GL/glew.h>
-#include <GL/glu.h>
+#include <GL/glut.h>
+#endif
+#ifdef WIN_WITH_OPENGL_ES2
+typedef int GLint;
+typedef unsigned int GLuint;
+#include <gles2/gl2.h>
+#endif
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <QDebug>
@@ -11,7 +18,11 @@
 
 int ShootingFrame::onFrameInit(){
     int ret = 0;
+#ifdef UBUNTU_WITH_GL
+
     glEnable(GL_BLEND|GL_DOUBLE|GL_ALPHA_TEST);
+#endif
+    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     pvmMatRef = getShaderMap()->getUniformRef("pvmMat");
     uvUniformRef = getShaderMap()->getUniformRef("_uv");

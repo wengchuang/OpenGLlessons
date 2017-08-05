@@ -50,7 +50,9 @@ void GLESFrame::onRender(int width, int height){
     }
 
     mShader->unbindShader();
+#ifdef UBUNTU_WITH_GL
     glutSwapBuffers();
+#endif
 }
 void GLESFrame::addChild(FrameItem* item){
     if(item)

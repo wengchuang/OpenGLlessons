@@ -2,8 +2,15 @@
 #include "absgles2app.h"
 #include "shader.h"
 #include <typeinfo>
+#ifdef UBUNTU_WITH_GL
 #include <GL/glew.h>
-#include <GL/glu.h>
+#include <GL/glut.h>
+#endif
+#ifdef WIN_WITH_OPENGL_ES2
+typedef int GLint;
+typedef unsigned int GLuint;
+#include <gles2/gl2.h>
+#endif
 #include "visionmath.hpp"
 
 player::player(ShaderMap* shaderMap):FrameItem(shaderMap)

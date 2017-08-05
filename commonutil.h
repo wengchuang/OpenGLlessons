@@ -1,7 +1,14 @@
 #ifndef COMMONUTIL_H
 #define COMMONUTIL_H
+#ifdef UBUNTU_WITH_GL
 #include <GL/glew.h>
 #include <GL/glu.h>
+#endif
+#ifdef WIN_WITH_OPENGL_ES2
+typedef int GLint;
+typedef unsigned int GLuint;
+#include <gles2/gl2.h>
+#endif
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>

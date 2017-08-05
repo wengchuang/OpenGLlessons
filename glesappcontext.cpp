@@ -9,8 +9,9 @@ GLESAppContext::GLESAppContext()
     assert(Resources[TEXTURE_RESOURCE] != NULL);
     errCode = Resources[TEXTURE_RESOURCE]->resourceInitialize();
     assert(errCode == 0);
-
+#ifdef UBUNTU_WITH_GL
     Resources[TIMERMANAGER_RESOURCE] = new GLUTimerManager;
+#endif
     assert(Resources[TIMERMANAGER_RESOURCE]!=NULL);
     errCode = Resources[TIMERMANAGER_RESOURCE]->resourceInitialize();
     assert(errCode == 0);

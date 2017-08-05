@@ -36,8 +36,9 @@ void PyramidRender::onUpdate(Shader* shader,
 
     GLint ref = shader->getShaderMap()->getUniformRef("pvmMat");
     glUniformMatrix4fv(ref,1,GL_FALSE,&mat[0][0]);
-
+#ifdef UBUNTU_WITH_GL
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+#endif
     glEnableVertexAttribArray (0);
     glDrawArrays( GL_TRIANGLE_FAN, 0, mPoints->size() );
     glDisableVertexAttribArray(0);

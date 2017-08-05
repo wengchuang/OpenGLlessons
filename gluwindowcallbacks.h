@@ -1,3 +1,5 @@
+#ifdef UBUNTU_WITH_GL
+
 #ifndef GLUWINDOWCALLBACKS_H
 #define GLUWINDOWCALLBACKS_H
 #include <GL/glew.h>
@@ -40,3 +42,4 @@ private:
 };
 
 #endif // GLUWINDOWCALLBACKS_H
+#endif
