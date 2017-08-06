@@ -37,7 +37,7 @@ public:
 private:
     IGLInput* mInput;
     Delegate<void> mUpdateDelegate;
-    Delegate2<void,int,int> mResizeFun;
+    Delegate2<void,const int&,const int&> mResizeFun;
     static GLUWindowCallBacks* instance;
 };
 

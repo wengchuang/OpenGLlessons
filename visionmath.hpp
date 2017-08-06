@@ -3,7 +3,26 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 namespace Vision{
-
+    template <typename valType>
+    glm::tmat4x4<valType>  ortho
+                        (
+                        valType left,
+                        valType right,
+                        valType bottom,
+                        valType top,
+                        valType zNear,
+                        valType zFar
+                        )
+    {
+        glm::tmat4x4<valType> res(1);
+        res[0][0]   =   valType(2) / (right - left);
+        res[1][1]   =   valType(2) / (top - bottom);
+        res[2][2]   =   - valType(2) / (zFar - zNear);
+        res[3][0]   =   - (right + left) / (right - left);
+        res[3][1]   =   - (top + bottom) / (top - bottom);
+        res[3][2]   =   - (zFar + zNear) / (zFar - zNear);
+        return res;
+    }
 
     template <typename T>
     typename glm::tvec2<T>::value_type length(glm::tvec2<T> const & v)

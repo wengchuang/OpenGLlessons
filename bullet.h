@@ -5,25 +5,21 @@
 #include "textureresource.h"
 #include "IRenderable.h"
 #include "shader.h"
-class Bullet:public IModelRenderable
+class Bullet:public Vision::IModelRenderable
 {
 public:
-    Bullet(ShaderMap* map,const unsigned long& timeSpec,const int& curTime);
+    Bullet(ShaderMap* map);
     virtual ~Bullet(){}
     void setDir(const glm::vec3& dir);
     void setSize(const glm::vec2& Size);
     void setSpeed(float speeed);
     void setMaxDistance(float dist);
     void setPosition(const glm::vec3& pos);
-    inline void setTimes(const int& curTime){
-        this->curTime = curTime;
-        update();
-    }
     bool isDead();
 
-    virtual void onRender(int width, int height, const glm::mat4 &pvMat);
+    virtual void onRender(const Vision::FrameEvent&,const glm::mat4&);
 private:
-    void update();
+    void update(const float& elasped);
 private:
     Vision::VisionNode  bulletBody;
     Texture2dId         _texture;
@@ -35,9 +31,7 @@ private:
     glm::vec3       _dir;
     glm::vec3       _posSrc;
     ShaderMap*      mShaderMap;
-    unsigned long   timeSpec;
-    int             beginTimes;
-    int             curTime;
+
 };
 
 #endif // BULLET_H

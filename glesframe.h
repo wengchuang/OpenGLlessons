@@ -9,9 +9,10 @@ class GLESFrame : public AbsGLFrame
 {
     friend class GLESFrameGenerator;
 public:
-    int frameInit();
+    int frameInit(const int& mWidth,const int& mHeight);
     virtual ~GLESFrame();
-    virtual void onRender(int width, int height);
+    virtual void onRender(const Vision::FrameEvent&);
+    virtual void onRender(const int& width,const int& height,const Vision::FrameEvent&);
     virtual void onMouseMove(int absx, int absy, int  absz);
 
     virtual void onMousePress(int absx, int absy, MouseButton id);
@@ -45,7 +46,7 @@ protected:
     }
     virtual int onFrameInit(){return 0;}
     virtual ShaderInfo* onLoadShaderInfo(){return NULL;}
-    virtual void renderSelf(int /*width*/, int /*height*/){}
+    virtual void renderSelf(const Vision::FrameEvent&){}
     inline ShaderMap* getShaderMap(){
         return mShaderMap;
     }
@@ -54,6 +55,10 @@ protected:
        return mat;
     }
     void addChild(FrameItem* item);
+
+protected:
+    int  mWidth ;
+    int  mHeight;
 private :
       Shader *mShader;
       ShaderMap*mShaderMap;

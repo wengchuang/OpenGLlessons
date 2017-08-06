@@ -7,7 +7,7 @@ GLESFrame::GLESFrame()
 {
     mShader = NULL;
 }
-int GLESFrame::frameInit(){
+int GLESFrame::frameInit(const int& mWidth,const int& mHeight){
     int ret = -1;
     if(mShader){
         return 0;
@@ -26,26 +26,32 @@ int GLESFrame::frameInit(){
         return  ret;
     }
     delete prover;
+    this->mWidth = mWidth;
+    this->mHeight = mHeight;
     return onFrameInit();
 }
 GLESFrame::~GLESFrame(){
+    qDebug()<<"GLESFrame::~GLESFrame begin......";
     for(ChildList::iterator it  = childs.begin(); it != childs.end(); )
     {
          FrameItem* item  =   *it;
          it = childs.erase(it);
          delete item;
     }
-    delete mShader;
 
+    delete mShader;
+    qDebug()<<"GLESFrame::~GLESFrame end......";
 }
-void GLESFrame::onRender(int width, int height){
+
+
+void GLESFrame::onRender(const Vision::FrameEvent& _event){
     mShader->bindShader();
-    renderSelf(width,height);
+    renderSelf(_event);
     ChildList::iterator itr = childs.begin();
     for ( ;itr != childs.end() ; )
     {
         FrameItem* item  =   *itr;
-        item->onRender(width,height,onGetPVMat());
+        item->onRender(_event,onGetPVMat());
         ++itr;
     }
 
@@ -53,7 +59,15 @@ void GLESFrame::onRender(int width, int height){
 #ifdef UBUNTU_WITH_GL
     glutSwapBuffers();
 #endif
+    //eglSwapBuffers(_display,_surface);
 }
+void GLESFrame::onRender(const int& width,const int& height,const Vision::FrameEvent&_event){
+    this->mWidth = width;
+    this->mHeight = height;
+    onRender(_event);
+}
+
+
 void GLESFrame::addChild(FrameItem* item){
     if(item)
         childs.push_back(item);

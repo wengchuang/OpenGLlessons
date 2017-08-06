@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #endif
-#ifdef WIN_WITH_OPENGL_ES2
+#ifdef WIN32_WITH_OPENGL_ES2
 typedef int GLint;
 typedef unsigned int GLuint;
 #include <gles2/gl2.h>
@@ -15,78 +15,73 @@ typedef unsigned int GLuint;
 #include "textureresource.h"
 #include "absgles2app.h"
 #include "player.h"
+#include "visionmath.hpp"
 
 int ShootingFrame::onFrameInit(){
     int ret = 0;
 #ifdef UBUNTU_WITH_GL
-
     glEnable(GL_BLEND|GL_DOUBLE|GL_ALPHA_TEST);
 #endif
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    pvmMatRef = getShaderMap()->getUniformRef("pvmMat");
-    uvUniformRef = getShaderMap()->getUniformRef("_uv");
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+   pvmMatRef = getShaderMap()->getUniformRef("pvmMat");
+   uvUniformRef = getShaderMap()->getUniformRef("_texture");
 
-    texture = AbsGLES2App::getGLESAppContext()->getTextureResource()->getTexture("./data/image/main.tex");
+   texture = AbsGLES2App::getGLESAppContext()->getTextureResource()->getTexture("./data/image/main.tex");
 
-    player* p = new player(getShaderMap());
-    addChild(p );
-    bTimerUpdate = true;
-#if 0
+   player* p;
+
+
     p = new player(getShaderMap());
-    glm::vec3 pos = glm::vec3(100,600,0);
+    glm::vec3 pos = glm::vec3(100,100,0);
     p->setPos(pos);
     addChild( p);
-#endif
 
-   mTimer = new Timer(100);
-   mTimer->setTimerFun(this,&ShootingFrame::onUpdate);
-   AbsGLES2App::getGLESAppContext()->getTimerManagerResource()->registerTimer(mTimer);
+    p = new player(getShaderMap());
+    pos = glm::vec3(100,200,0);
+    p->setPos(pos);
+    addChild( p);
+
+    p = new player(getShaderMap());
+    pos = glm::vec3(200,300,0);
+    p->setPos(pos);
+    addChild( p);
+
+
 
     return ret;
 }
-void ShootingFrame::onUpdate(){
-    bTimerUpdate =true;
-    onRender(0 ,0);
-}
-void ShootingFrame::renderSelf(int width ,int height){
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-    if((width == 0) || (height == 0)){
-        width = mWidth;
-        height = mHeight;
-    }else{
-        mWidth  = width;
-        mHeight =height;
-    }
-    glViewport(0,0,width,height);
 
-    mPVMat = glm::ortho(0.0f,(float)width,(float)height,0.0f);
-    glUniformMatrix4fv(pvmMatRef,1,GL_FALSE,&mPVMat[0][0]);
+void ShootingFrame::renderSelf(const Vision::FrameEvent& _event){
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+   // qDebug()<<"mWidth:"<<mWidth<<"      "<<"mHeight:"<<mHeight;
+    glViewport(0,0,mWidth,mHeight);
+
+    mPVMat = glm::ortho(0.0f,(float)mWidth,(float)mHeight,0.0f);
     float   x   =   0;
     float   y   =   0;
     float   w   =   (float)mWidth;
     float   h   =   (float)mHeight;
     static  float   vv  =   0;
-    if(bTimerUpdate){
-        vv  +=  0.02f;
-        bTimerUpdate = false;
-    }
-    GLfloat vert[]   =
+
+    vv  +=  0.001f;
+
+    float vert[]   =
     {
-        x,      y,     0,   0, vv,
-       (x+w),   y,     0,   1, vv,
-        x   ,   (y+h), 0,   0, 1+vv,
-       (x+w),   (y+h), 0,   1, 1+vv
+        x,      y,     0.0f,    1.0f,  0, vv,
+       (x+w),   0,     0.0f,    1.0f,  1, vv,
+        0   ,   (y+h), 0.0f,    1.0f,  0, 1+vv,
+       (x+w),   (y+h), 0.0f,    1.0f,  1, 1+vv
     };
 
 
     glActiveTexture(GL_TEXTURE0 + 0);
     glBindTexture(GL_TEXTURE_2D,texture._texture);
+    glUniformMatrix4fv(pvmMatRef,1,GL_FALSE,&mPVMat[0][0]);
     glUniform1i(uvUniformRef, 0);
-    glVertexAttribPointer(0,  3,  GL_FLOAT,   false,  5*sizeof(GLfloat),vert);
-    glVertexAttribPointer(1,  2,  GL_FLOAT,   false, 5*sizeof(GLfloat),
-                          &vert[3]);
+    glVertexAttribPointer(getShaderMap()->getVertexRef("position"),  4,  GL_FLOAT,   false,  6*sizeof(float),vert);
+    glVertexAttribPointer(getShaderMap()->getVertexRef("_uv"),  2,  GL_FLOAT,   false, 6*sizeof(float),&vert[4]);
     glDrawArrays(GL_TRIANGLE_STRIP,0,4);
 
 }
@@ -95,16 +90,24 @@ void ShootingFrame::renderSelf(int width ,int height){
 ShaderInfo* ShootingFrame::onLoadShaderInfo(){
     if(!mShaderInfo){
         mShaderInfo = new ShaderInfo;
-        mShaderInfo->setFsFileName("./shootingframe.fsh");
-        mShaderInfo->setVsFileName("./shootingframe.vsh");
+        #ifdef WIN32_WITH_OPENGL_ES2
+        mShaderInfo->setFsFileName("./shootingframe_win.fsh");
+        mShaderInfo->setVsFileName("./shootingframe_win.vsh");
+        #endif
+        #ifdef UBUNTU_WITH_GL
+        mShaderInfo->setFsFileName("./shootingframe_ubuntu.fsh");
+        mShaderInfo->setVsFileName("./shootingframe_ubuntu.vsh");
+        #endif
         mShaderInfo->addVertex("position");
         mShaderInfo->addVertex("_uv");
         mShaderInfo->addUniform("pvmMat");
         mShaderInfo->addUniform("_texture");
+
     }
     return mShaderInfo;
 }
 ShootingFrame::~ShootingFrame(){
+    qDebug()<<"ShootingFrame::~ShootingFrame() begin ...";
     delete mShaderInfo;
-    delete mTimer;
+    qDebug()<<"ShootingFrame::~ShootingFrame() end ...";
 }

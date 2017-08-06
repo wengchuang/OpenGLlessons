@@ -2,7 +2,7 @@
 #define ABSGLFRAME_H
 #include "frameitem.h"
 
-class AbsGLFrame : public IGLInput,public IRenderable
+class AbsGLFrame : public IGLInput,public Vision::IFrameRenderable
 {
 
 };

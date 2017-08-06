@@ -32,7 +32,7 @@ private:
     Texture2dId createTexture2DFromFile(const char* fileName);
     Texture2dId createTexture2DFromStream( const char* stream,unsigned length );
 private:
-    TextureMap          _textureMap;
+    TextureMap*          _textureMap;
 };
 
 #endif // TEXTURERESOURCE_H

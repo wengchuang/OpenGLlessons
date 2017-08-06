@@ -4,7 +4,7 @@
 #include "IRenderable.h"
 #include "shader.h"
 
-class FrameItem : public IGLInput,public IModelRenderable
+class FrameItem : public IGLInput,public Vision::IModelRenderable
 {
 public:
     FrameItem(ShaderMap* shaderMap){
@@ -36,7 +36,6 @@ public:
     *   输入
     */
     virtual void onChar(int /*ch*/) {}
-    virtual void onRender(int width,int height,const glm::mat4& pvMat) = 0;
 protected:
     inline ShaderMap* getShaderMap(){
         return mShaderMap;

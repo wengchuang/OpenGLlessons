@@ -24,6 +24,7 @@ GLuint GLSLCompiler::compileFromeFile(const char* vertexFileName,
     QString vertexText,fragmentText;
 
     if(loadSourceFromeFile(vertexFileName,vertexText)== -1){
+
         return Result;
     }
 
@@ -31,7 +32,7 @@ GLuint GLSLCompiler::compileFromeFile(const char* vertexFileName,
         return Result;
     }
 
-    return compileFromString(vertexText.toLocal8Bit().data() ,
+    return compileFromString(vertexText.toLocal8Bit().data(),
                              fragmentText.toLocal8Bit().data());
 }
 GLuint GLSLCompiler::compileFromString(const char* vertexString,

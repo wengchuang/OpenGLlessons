@@ -12,27 +12,20 @@ public:
 protected:
     ShootingFrame(){
         mShaderInfo= NULL;
-        mTimer = NULL;
                    }
 protected:
     ShaderInfo* onLoadShaderInfo();
-    void renderSelf(int width, int height);
+    void renderSelf(const Vision::FrameEvent& _event);
     int onFrameInit();
     glm::mat4& onGetPVMat(){
         return mPVMat;
     }
-private:
-    void onUpdate();
 private:
     Texture2dId    texture;
     GLint          pvmMatRef;
     GLint          uvUniformRef;
     ShaderInfo*    mShaderInfo;
     glm::mat4      mPVMat;
-    Timer* mTimer;
-    float mWidth ;
-    float mHeight;
-    bool bTimerUpdate;
 };
 class ShootingFrameGenerator:public IGLESFrameGenerator{
 public:

@@ -1,11 +1,13 @@
 #include "textureresource.h"
+#include <QDebug>
 
 Texture2dId TextureResource::getTexture(const char* texture){
-    TextureMap::iterator itr = _textureMap.find(texture);
-    if (itr == _textureMap.end())
+    TextureMap::iterator itr = _textureMap->find(texture);
+    if (itr == _textureMap->end())
     {
         Texture2dId texId   =   createTexture2DFromFile(texture);
-        _textureMap[texture]=   texId;
+        //_textureMap->texture=   texId;
+        _textureMap->insert(std::make_pair(texture,texId));
         return      texId;
     }
     else
@@ -73,13 +75,17 @@ Texture2dId TextureResource::createTexture2DFromStream( const char* stream,unsig
     return  texId;
 }
 int TextureResource::resourceInitialize(){
+    _textureMap = new TextureMap;
     return 0;
 }
 int TextureResource::resourceUnInitialize(){
-    TextureMap::iterator itr = _textureMap.begin();
-    TextureMap::iterator endItr = _textureMap.end();
-    for(;itr != endItr;itr++){
+    qDebug()<<"TextureResource::resourceUnInitialize() begin...";
+    TextureMap::iterator itr = _textureMap->begin();
+    TextureMap::iterator endItr = _textureMap->end();
+    for(;itr != endItr;++itr){
         glDeleteTextures(1,&((itr->second)._texture));
     }
+    delete _textureMap;
+    qDebug()<<"TextureResource::resourceUnInitialize() end...";
     return 0;
 }

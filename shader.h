@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #endif
-#ifdef WIN_WITH_OPENGL_ES2
+#ifdef WIN32_WITH_OPENGL_ES2
 typedef int GLint;
 typedef unsigned int GLuint;
 #include <gles2/gl2.h>
@@ -110,39 +110,49 @@ private:
 
 class ShaderMap{
 public:
-   inline GLint getVertexRef(const char* name){
+    ShaderMap(){
+        vertexMap = new std::map<std::string,GLint>;
+        uniformMap = new std::map<std::string,GLint>;
+    }
+    ~ShaderMap(){
+        delete vertexMap;
+        delete uniformMap;
+    }
+   inline GLint getVertexRef(char* name){
         GLint ret = -1;
-        std::map<std::string,GLint>::iterator itr = vertexMap.find(std::string(name));
-        if(itr != vertexMap.end())
+        map<string,GLint>::iterator itr = vertexMap->find(std::string(name));
+        if(itr != vertexMap->end())
         {
             ret = itr->second;
         }
         return ret;
    }
 
-   inline GLint getUniformRef(const char* name){
+   inline GLint getUniformRef(char* name){
        GLint ret = -1;
-       std::map<std::string,GLint>::iterator itr = uniformMap.find(std::string(name));
-       if(itr != uniformMap.end())
+       map<string,GLint>::iterator itr = uniformMap->find(name);
+
+       if(itr != uniformMap->end())
        {
            ret = itr->second;
-       }
+      }
+
        return ret;
    }
 private:
     friend class Shader;
     inline void setVertexMapValue(char*name,GLint value){
-        vertexMap.insert(make_pair(name,   value));
+        vertexMap->insert(make_pair(name,value));
     }
     inline void setUniformMapValue(char*name,GLint value){
-        uniformMap.insert(make_pair(name,   value));
+        uniformMap->insert(make_pair(name,value));
     }
     inline void clear(){
-        vertexMap.clear();
-        uniformMap.clear();
+        vertexMap->clear();
+        uniformMap->clear();
     }
-    std::map<std::string,GLint> vertexMap;
-    std::map<std::string,GLint> uniformMap;
+    map<string,GLint>* vertexMap;
+    map<string,GLint>* uniformMap;
 };
 
 class Shader

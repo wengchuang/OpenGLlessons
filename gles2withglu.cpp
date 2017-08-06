@@ -21,20 +21,12 @@ int GLES2WithGLU::initWindows(){
     ret =  glewInit();
     if(ret == 0){
         GLUWindowCallBacks::getInstance()->setUpdateFun<GLES2WithGLU,void>(this,&GLES2WithGLU::update);
-        GLUWindowCallBacks::getInstance()->setResizeFun<GLES2WithGLU,void,int,int>(this,&GLES2WithGLU::onWindowsSizeChanaged);
+        GLUWindowCallBacks::getInstance()->setResizeFun<GLES2WithGLU,void,const int&,const int&>(this,&GLES2WithGLU::resize);
     }
     return ret;
 }
-
-void GLES2WithGLU::onWindowsSizeChanaged(int width,int height){
-    int x ,y,mWidth,mHeight;
-    this->getWindowInfo(&x ,&y,&mWidth,&mHeight);
-    this->setWidowsArea(x,y,width,height);
-    this->update();
-}
 void GLES2WithGLU::onInputDeviceChanaged(IGLInput* input){
     GLUWindowCallBacks::getInstance()->setInput(input);
-
     return ;
 }
 int GLES2WithGLU::mainLoop(){

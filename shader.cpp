@@ -11,15 +11,19 @@ Shader::Shader()
 
 
 ShaderMap* Shader::shaderInit(ShaderInfo* info){
+
     programId = GLSLCompiler::compileFromeFile(info->getVsFileName(),info->getFsFileName());
+
     if(programId == 0){
         return NULL;
     }
+
     if(mShaderMap){
         mShaderMap->clear();
     }else{
         mShaderMap = new ShaderMap;
     }
+
     bindVertexAtrributes(info);
     bindUniforms(info);
     return mShaderMap;
@@ -40,15 +44,15 @@ int Shader::bindUniforms(ShaderInfo* info){
 
 
 void Shader::enableVertexAttributeArrays(){
-    std::map<std::string,GLint>::iterator it = mShaderMap->vertexMap.begin();
-    std::map<std::string,GLint>::iterator endIt = mShaderMap->vertexMap.end();;
+    std::map<std::string,GLint>::iterator it = mShaderMap->vertexMap->begin();
+    std::map<std::string,GLint>::iterator endIt = mShaderMap->vertexMap->end();;
     for(; it!=endIt; ++it){
        glEnableVertexAttribArray(it->second);
     }
 }
 void Shader::disableVertexAttributeArrays(){
-    std::map<std::string,GLint>::iterator it = mShaderMap->vertexMap.begin();
-    std::map<std::string,GLint>::iterator endIt = mShaderMap->vertexMap.end();;
+    std::map<std::string,GLint>::iterator it = mShaderMap->vertexMap->begin();
+    std::map<std::string,GLint>::iterator endIt = mShaderMap->vertexMap->end();;
     for(; it!=endIt; ++it){
        glDisableVertexAttribArray(it->second);
     }

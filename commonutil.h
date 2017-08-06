@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 #include <GL/glu.h>
 #endif
-#ifdef WIN_WITH_OPENGL_ES2
+#ifdef WIN32_WITH_OPENGL_ES2
 typedef int GLint;
 typedef unsigned int GLuint;
 #include <gles2/gl2.h>

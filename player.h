@@ -10,9 +10,11 @@ class player:public FrameItem
 {
 public:
     player(ShaderMap* shaderMap);
-    void setPos(glm::vec3& pos);
-    virtual void onRender(int width,int height,const glm::mat4& pvMat);
-    void addBullet();
+    inline void setPos(glm::vec3& pos){
+        _nodeBody.setPosition(pos);
+    }
+    virtual void onRender(const Vision::FrameEvent&,const glm::mat4& pvMat);
+    int addBullet(Vision::VisionTimer* timer,const float& elapsed);
     ~player();
 protected:
     virtual void onChar(int ch);
@@ -20,17 +22,15 @@ protected:
     virtual void onMouseRelease(int, int, MouseButton);
     virtual void onMouseMove(int, int, int);
 private:
-    void renderChildren(const glm::mat4& pvMat);
+    void renderChildren(const Vision::FrameEvent&_event,const glm::mat4& pvMat);
 private:
     typedef std::vector<Bullet*>   BulletList;
-    Vision::VisionNode _nodeBody;
-    Texture2dId        _plant;
-    ShaderMap*         mShaderMap;
-    bool               bLeftPress;
-    BulletList         bulletList;
-    Timer              *mTimer;
-    int                 times;
-
+    Vision::VisionNode      _nodeBody;
+    Texture2dId             _plant;
+    ShaderMap*              mShaderMap;
+    bool                    bLeftPress;
+    BulletList              bulletList;
+    Vision::VisionTimer*     mTimer;
 };
 
 #endif // PLAYER_H

@@ -1,13 +1,18 @@
 #ifndef IRENDERABLE_H
 #define IRENDERABLE_H
-#include <stdio.h>
+#include "timerevent.h"
 #include "glm/glm.hpp"
-class IRenderable{
+namespace Vision {
+class IFrameRenderable{
 public:
-    virtual void onRender(int width,int height) = 0;
+    virtual void onRender(const FrameEvent&) = 0;
+    virtual void onRender(const int& width,const int& height,const FrameEvent&) = 0;
 };
 class IModelRenderable{
 public:
-    virtual void onRender(int width,int height,const glm::mat4& pvMat) = 0;
+    virtual void onRender(const FrameEvent&,const glm::mat4&) = 0;
 };
+
+}
+
 #endif // IRENDERABLE_H

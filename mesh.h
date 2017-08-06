@@ -7,7 +7,7 @@
 #ifdef WIN_WITH_OPENGL_ES2
 typedef int GLint;
 typedef unsigned int GLuint;
-#include <gles2/gl2.h>
+
 #endif
 #include <QDebug>
 #include "baserender.h"

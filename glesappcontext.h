@@ -1,7 +1,7 @@
 #ifndef GLESAPPCONTEXT_H
 #define GLESAPPCONTEXT_H
 class IResourceItem;
-#include "itimermanager.h"
+#include "timermanager.h"
 #include "textureresource.h"
 
 class GLESAppContext
@@ -17,8 +17,8 @@ public:
     inline TextureResource* getTextureResource(){
         return (TextureResource*)Resources[TEXTURE_RESOURCE];
     }
-    inline ITimerManager* getTimerManagerResource(){
-        return (ITimerManager*)Resources[TIMERMANAGER_RESOURCE];
+    inline Vision::TimerManager* getTimerManagerResource(){
+        return (Vision::TimerManager*)Resources[TIMERMANAGER_RESOURCE];
     }
 private:
     friend class AbsGLES2App;

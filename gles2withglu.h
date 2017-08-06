@@ -11,7 +11,6 @@ protected:
     int onInitOpenGLES();
     void onDestroyOpenGLES();
     void onInputDeviceChanaged(IGLInput*);
-    void onWindowsSizeChanaged(int width,int height);
     int mainLoop();
 
 };
