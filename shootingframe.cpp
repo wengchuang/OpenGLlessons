@@ -16,6 +16,7 @@ typedef unsigned int GLuint;
 #include "absgles2app.h"
 #include "player.h"
 #include "visionmath.hpp"
+#include "clockbg.h"
 
 int ShootingFrame::onFrameInit(){
     int ret = 0;
@@ -28,7 +29,7 @@ int ShootingFrame::onFrameInit(){
    uvUniformRef = getShaderMap()->getUniformRef("_texture");
 
    texture = AbsGLES2App::getGLESAppContext()->getTextureResource()->getTexture("./data/image/main.tex");
-
+#if 1
    player* p;
 
 
@@ -46,9 +47,11 @@ int ShootingFrame::onFrameInit(){
     pos = glm::vec3(200,300,0);
     p->setPos(pos);
     addChild( p);
-
-
-
+#endif
+#if 1
+    ClockBg* bg = new ClockBg(getShaderMap());
+    addChild( bg);
+#endif
     return ret;
 }
 

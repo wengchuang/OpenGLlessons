@@ -1,7 +1,6 @@
 #include "player.h"
 #include "absgles2app.h"
 #include "shader.h"
-#include <typeinfo>
 #ifdef UBUNTU_WITH_GL
 #include <GL/glew.h>
 #include <GL/glut.h>

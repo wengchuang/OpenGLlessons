@@ -1,6 +1,5 @@
 #include "glesappcontext.h"
 #include "textureresource.h"
-#include "glutimermanager.h"
 
 GLESAppContext::GLESAppContext()
 {

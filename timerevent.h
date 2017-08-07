@@ -3,7 +3,10 @@
 #ifdef WIN32_WITH_OPENGL_ES2
     #include <windows.h>
 #else
-    #include <sys/time.h>
+#include <sys/time.h>
+#ifndef NULL
+#define NULL (0)
+#endif
 #endif
 namespace Vision {
 class TimeStamp

@@ -1,11 +1,11 @@
+#ifdef WIN32_WITH_OPENGL_ES2
 #include "wingles2app.h"
-
 WinGles2App::WinGles2App(HINSTANCE hInstance)
     :AbsGLES2App()
 {
     _hInstance = hInstance;
     WNDCLASSEX  winClass;
-                winClass.lpszClassName  =  (LPCWSTR)("CELLWinApp");
+                winClass.lpszClassName  =  _T("WinFrame");
                 winClass.cbSize         =   sizeof(winClass);
                 winClass.style          =   CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
                 winClass.lpfnWndProc    =   wndProc;
@@ -24,8 +24,8 @@ int WinGles2App::initWindows(){
     int x,y,width,height;
     getWindowInfo(&x,&y,&width,&height);
     _hWnd   =   CreateWindowEx( NULL,
-                                            (LPCWSTR)("CELLWinApp"),
-                                            (LPCWSTR)("CELLWinApp"),
+                                            _T("WinFrame"),
+                                            _T("WinFrame"),
                                             WS_OVERLAPPEDWINDOW,
                                             CW_USEDEFAULT,
                                             CW_USEDEFAULT,
@@ -40,6 +40,7 @@ int WinGles2App::initWindows(){
     {
         return  -1;
     }
+
 
     ShowWindow(_hWnd,SW_SHOW);
     return 0;
@@ -243,3 +244,4 @@ LRESULT WinGles2App::onEvent(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return  S_OK;
 
 }
+#endif

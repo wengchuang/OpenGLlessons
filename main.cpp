@@ -24,7 +24,6 @@ int APIENTRY WinMain(
     UNREFERENCED_PARAMETER(lpCmdLine);
     UNREFERENCED_PARAMETER(nCmdShow);
 
-
     AllocConsole();
     freopen("conout$","w",stdout) ;
     printf("hello hplonline!-_-\n") ;

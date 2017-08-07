@@ -9,13 +9,15 @@
 
 #include <EGL/egl.h>
 #include <gles2/gl2.h>
+#include <TCHAR.h>
+
 
 class WinGles2App : public AbsGLES2App
 {
 public:
     WinGles2App(HINSTANCE hInstance);
     virtual ~WinGles2App(){
-        UnregisterClass((LPCWSTR)("CELLWinApp"),_hInstance);
+        UnregisterClass("CELLWinApp",_hInstance);
     }
 
 private:

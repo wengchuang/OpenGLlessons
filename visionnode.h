@@ -49,6 +49,7 @@ namespace Vision{
             rote.z += angle;
             bNeedUpdate  =  true;
         }
+        inline glm::vec3 getRote(){return rote; }
         inline const glm::mat4&  getMatrix() const
         {
             return  local;
@@ -61,15 +62,6 @@ namespace Vision{
                     (point.x <= maxPos.x) &&
                     (point.y <= maxPos.y));
         }
-    private:
-        glm::vec3               pos;
-        glm::vec3               rote;
-        glm::vec3               scale;
-        glm::vec2               mSize;
-        glm::mat4               local;
-        AxisAlignedBox<float>   alBox;
-        bool                    bNeedUpdate;
-    private:
         inline glm::mat4 getModelMatrix()const{
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model,pos);
@@ -79,6 +71,16 @@ namespace Vision{
             model = glm::scale(model,scale);
             return model;
         }
+    private:
+        glm::vec3               pos;
+        glm::vec3               rote;
+        glm::vec3               scale;
+        glm::vec2               mSize;
+        glm::mat4               local;
+        AxisAlignedBox<float>   alBox;
+        bool                    bNeedUpdate;
+    private:
+
     };
 }
 #endif // VISIONNODE_H
