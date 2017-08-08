@@ -21,7 +21,6 @@ int AbsGLES2App::exec(){
                     if(!errCode){
                         onInputDeviceChanaged(esFrame);
                         errCode = mainLoop();
-
                     }
                     qDebug()<<"delete esFrame begin...............\n";
                     delete esFrame;
@@ -44,9 +43,9 @@ int AbsGLES2App::exec(){
 void AbsGLES2App::resize(const int& width,const int&height){
     this->mWidth = width;
     this->mHeight = height;
+    qDebug()<<"resize...";
     syncFrameTime();
-    esFrame->onRender(width,height,_event);
-
+    esFrame->onRender(mWidth,mHeight,_event);
 }
 void AbsGLES2App::update(){
     syncFrameTime();

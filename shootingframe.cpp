@@ -29,7 +29,7 @@ int ShootingFrame::onFrameInit(){
    uvUniformRef = getShaderMap()->getUniformRef("_texture");
 
    texture = AbsGLES2App::getGLESAppContext()->getTextureResource()->getTexture("./data/image/main.tex");
-#if 1
+
    player* p;
 
 
@@ -37,7 +37,7 @@ int ShootingFrame::onFrameInit(){
     glm::vec3 pos = glm::vec3(100,100,0);
     p->setPos(pos);
     addChild( p);
-
+#if 1
     p = new player(getShaderMap());
     pos = glm::vec3(100,200,0);
     p->setPos(pos);

@@ -8,6 +8,7 @@
 #ifdef WIN32_WITH_OPENGL_ES2
 #pragma comment  (lib,"User32.lib")
 #pragma comment  (lib,"Gdi32.lib")
+
 #include <Windows.h>
 #include <iostream>
 #include <tchar.h>
@@ -20,7 +21,6 @@ int APIENTRY WinMain(
     )
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(hInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
     UNREFERENCED_PARAMETER(nCmdShow);
 
@@ -32,12 +32,14 @@ int APIENTRY WinMain(
     std::cerr<<"i'm cerr"<<std::endl;
 
     WinGles2App* app = new WinGles2App(hInstance);
+
     app->setWidowsArea(600,100,400, 800);
-    app->setWindowsTitle("ShootingApp");
+    app->setWindowsTitle("winFrameApp");
     ShootingFrameGenerator* generator = new ShootingFrameGenerator;
 
     app->setGLESFrameGenerator(generator);
-    app->exec();
+
+   return app->exec();
     delete generator;
     delete app;
     return 0;

@@ -1,4 +1,5 @@
 #include "visionnode.h"
+#include <QDebug>
 namespace Vision{
 VisionNode::VisionNode(void* user)
 {

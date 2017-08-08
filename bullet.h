@@ -5,23 +5,25 @@
 #include "textureresource.h"
 #include "IRenderable.h"
 #include "shader.h"
-class Bullet:public Vision::IModelRenderable
+#include "frameitem.h"
+class Bullet: public FrameItem
 {
 public:
-    Bullet(ShaderMap* map);
+    Bullet(ShaderMap* map,  FrameItem* parent = 0);
     virtual ~Bullet(){}
     void setDir(const glm::vec3& dir);
-    void setSize(const glm::vec2& Size);
     void setSpeed(float speeed);
     void setMaxDistance(float dist);
-    void setPosition(const glm::vec3& pos);
+    void inline setSrcPos(const glm::vec3& pos){
+        _posSrc = pos;
+        setPosition(pos);
+    }
     bool isDead();
+    void updatePos(const float& elasped);
+protected:
+    void onDrawSelf(const Vision::FrameEvent&,const glm::mat4&);
 
-    virtual void onRender(const Vision::FrameEvent&,const glm::mat4&);
 private:
-    void update(const float& elasped);
-private:
-    Vision::VisionNode  bulletBody;
     Texture2dId         _texture;
     bool            _isDead;
     float           _attrSpeed;
@@ -30,7 +32,6 @@ private:
     float           _attrHurt;
     glm::vec3       _dir;
     glm::vec3       _posSrc;
-    ShaderMap*      mShaderMap;
 
 };
 

@@ -1,23 +1,22 @@
 #ifdef WIN32_WITH_OPENGL_ES2
 #ifndef WINGLES2APP_H
 #define WINGLES2APP_H
-#include "absgles2app.h"
-#include "iglinput.h"
+
 
 #include <Windows.h>
 #include <tchar.h>
 
 #include <EGL/egl.h>
 #include <gles2/gl2.h>
-#include <TCHAR.h>
-
+#include "absgles2app.h"
+#include "iglinput.h"
 
 class WinGles2App : public AbsGLES2App
 {
 public:
     WinGles2App(HINSTANCE hInstance);
     virtual ~WinGles2App(){
-        UnregisterClass("CELLWinApp",_hInstance);
+        UnregisterClass(_T("CELLWinApp"),_hInstance);
     }
 
 private:

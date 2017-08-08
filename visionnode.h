@@ -16,16 +16,20 @@ namespace Vision{
             return  mSize;
         }
         ~VisionNode(){}
-        inline void setPosition(const glm::vec3& pos)
+        virtual inline void setPosition(const glm::vec3& pos)
         {
             this->pos    =   pos;
+            bNeedUpdate  =  true;
+        }
+        virtual inline void delatPos(const glm::vec3& pos){
+            this->pos += pos;
             bNeedUpdate  =  true;
         }
         inline const glm::vec3& getPosition() const
         {
             return  this->pos;
         }
-        inline void setScale(const glm::vec3& scale)
+       virtual inline void setScale(const glm::vec3& scale)
        {
            this->scale  =   scale;
            bNeedUpdate  =  true;
@@ -34,17 +38,17 @@ namespace Vision{
         {
             return  this->scale;
         }
-        inline void  setRoteX(const float& angle)
+        virtual inline void  setRoteX(const float& angle)
         {
             rote.x += angle;
             bNeedUpdate  =  true;
         }
-        inline void  setRoteY(const float& angle)
+        virtual inline void  setRoteY(const float& angle)
         {
             rote.y += angle;
             bNeedUpdate  =  true;
         }
-        inline void  setRoteZ(const float& angle)
+        virtual inline void  setRoteZ(const float& angle)
         {
             rote.z += angle;
             bNeedUpdate  =  true;
@@ -62,15 +66,7 @@ namespace Vision{
                     (point.x <= maxPos.x) &&
                     (point.y <= maxPos.y));
         }
-        inline glm::mat4 getModelMatrix()const{
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model,pos);
-            model = glm::rotate(model,glm::radians(rote.x),glm::vec3(1.0f,0.0f,0.0f));
-            model = glm::rotate(model,glm::radians(rote.y),glm::vec3(0.0f,1.0f,0.0f));
-            model = glm::rotate(model,glm::radians(rote.z),glm::vec3(0.0f,0.0f,1.0f));
-            model = glm::scale(model,scale);
-            return model;
-        }
+
     private:
         glm::vec3               pos;
         glm::vec3               rote;
@@ -80,6 +76,15 @@ namespace Vision{
         AxisAlignedBox<float>   alBox;
         bool                    bNeedUpdate;
     private:
+        inline glm::mat4 getModelMatrix()const{
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model,pos);
+            model = glm::rotate(model,glm::radians(rote.x),glm::vec3(1.0f,0.0f,0.0f));
+            model = glm::rotate(model,glm::radians(rote.y),glm::vec3(0.0f,1.0f,0.0f));
+            model = glm::rotate(model,glm::radians(rote.z),glm::vec3(0.0f,0.0f,1.0f));
+            model = glm::scale(model,scale);
+            return model;
+        }
 
     };
 }

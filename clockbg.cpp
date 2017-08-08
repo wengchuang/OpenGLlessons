@@ -1,26 +1,29 @@
+#if 1
 #include "clockbg.h"
 #include "absgles2app.h"
 #include "shader.h"
+#include "clockpointer.h"
 
-ClockBg::ClockBg(ShaderMap* shaderMap):FrameItem(shaderMap)
+ClockBg::ClockBg(ShaderMap* shaderMap,FrameItem* parent ):FrameItem(shaderMap,parent)
 {
     clockBg =   AbsGLES2App::getGLESAppContext()->getTextureResource()->getTexture("./data/image/background.tex");
-    pointerBg = AbsGLES2App::getGLESAppContext()->getTextureResource()->getTexture("./data/image/needle.tex");
-    glm::vec2 size = glm::vec2(clockBg._width,clockBg._height);
-    _nodeBody.setSize(size);
-    _nodeBody.setPosition(glm::vec3(200,200,0));
 
-     size = glm::vec2(pointerBg._width,pointerBg._height);
-    _pointerBody.setSize(size);
-    _pointerBody.setPosition(glm::vec3(200,200,0));
+    glm::vec2 size = glm::vec2(clockBg._width,clockBg._height);
+    this->setSize(size);
+    this->setPosition(glm::vec3(200,200,0));
+    ClockPointer * pointer = new ClockPointer(shaderMap,this);
+    glm::vec3 pos = glm::vec3(size.x/2,size.y/2,.0f);
+    pointer->setpos(pos);
+
 }
 
-void ClockBg::onRender(const Vision::FrameEvent&ev,const glm::mat4& pvMat){
+void ClockBg::onDrawSelf(const Vision::FrameEvent&ev,const glm::mat4& pvMat){
 #if 1
     glActiveTexture(GL_TEXTURE0 + 0);
     glBindTexture(GL_TEXTURE_2D,clockBg._texture);
     static float scale =0.0f;
     static bool  scaleFlag = false;
+
     if(!scaleFlag){
         if(scale < 0.3f){
             scale += 0.001f;
@@ -35,18 +38,19 @@ void ClockBg::onRender(const Vision::FrameEvent&ev,const glm::mat4& pvMat){
            scaleFlag = !scaleFlag;
         }
     }
-    glm::vec3 pos = _nodeBody.getPosition();
+
     if(!scaleFlag){
-        pos.y += scale*1.2;
+        this->delatPos(glm::vec3(.0f,scale*1.2,.0f));
+
     }else{
-       pos.y -= scale*1.2;
+        this->delatPos(glm::vec3(.0f,-scale*1.2,.0f));
+
     }
-    _nodeBody.setPosition(pos);
-     _nodeBody.setScale(glm::vec3(1.0f  + scale,1.0f + scale,1.0f));
 
-
-    _nodeBody.update();
-    glm::vec2    halfSz  =   _nodeBody.getSize() * 0.5f;
+    this->setScale(glm::vec3(1.0f  + scale,1.0f + scale,1.0f));
+    //this->setPosition(glm::vec3(100,500,.0f));
+    this->update();
+    glm::vec2    halfSz  =   this->getSize() * 0.5f;
 
     glm::vec3    vMin    =   -glm::vec3 (halfSz.x,halfSz.y,0);
     glm::vec3    vMax    =   glm::vec3 (halfSz.x,halfSz.y,0);
@@ -60,14 +64,14 @@ void ClockBg::onRender(const Vision::FrameEvent&ev,const glm::mat4& pvMat){
     };
     static GLint matRef = getShaderMap()->getUniformRef("pvmMat");
     static GLint textureRef = getShaderMap()->getUniformRef("_texture");
-    glm::mat4   mvp     =   pvMat * _nodeBody.getMatrix();
+    glm::mat4   mvp     =   pvMat * this->getMatrix();
     glUniformMatrix4fv(matRef, 1, false, &mvp[0][0]);
     glUniform1i(textureRef,0);
     glVertexAttribPointer(getShaderMap()->getVertexRef("position"), 4,  GL_FLOAT,   false,  6*sizeof(float),vert);
     glVertexAttribPointer(getShaderMap()->getVertexRef("_uv"),  2,  GL_FLOAT,   false, 6*sizeof(float),&vert[4]);
     glDrawArrays(GL_TRIANGLE_STRIP,0,4);
 #endif
-#if 1
+#if 0
     glActiveTexture(GL_TEXTURE0 + 0);
     glBindTexture(GL_TEXTURE_2D,pointerBg._texture);
 
@@ -104,3 +108,4 @@ void ClockBg::onRender(const Vision::FrameEvent&ev,const glm::mat4& pvMat){
     glDrawArrays(GL_TRIANGLE_STRIP,0,4);
 #endif
 }
+#endif

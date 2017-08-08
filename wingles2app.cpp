@@ -40,8 +40,7 @@ int WinGles2App::initWindows(){
     {
         return  -1;
     }
-
-
+    qDebug()<<"_hWnd:"<<_hWnd;
     ShowWindow(_hWnd,SW_SHOW);
     return 0;
 
@@ -64,28 +63,40 @@ int WinGles2App::onInitOpenGLES(){
 
     //! 1
     _display	    =	eglGetDisplay(EGL_DEFAULT_DISPLAY);
+    qDebug() <<"_display:"<<_display;
 
     //! 2init
-    eglInitialize(_display, &major, &minor);
+    bool bRet = eglInitialize(_display, &major, &minor);
+     qDebug()<<"major:"<<major;
+      qDebug()<<"minor:"<<minor;
+
+    qDebug()<<"bRet:"<<bRet;
 
     //! 3
     eglChooseConfig(_display, attribs, &_config, 1, &numConfigs);
+    qDebug() <<"_display:"<<_display;
 
     eglGetConfigAttrib(_display, _config, EGL_NATIVE_VISUAL_ID, &format);
+    qDebug() <<"_config:"<<_config;
+
     //! 4
     _surface	    = 	eglCreateWindowSurface(_display, _config, _hWnd, NULL);
+    qDebug() <<"_surface:"<<_surface;
 
     //! 5
     EGLint attr[]   =   { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE, EGL_NONE };
     _context 	    = 	eglCreateContext(_display, _config, 0, attr);
+    qDebug() <<"_context:"<<_context;
     //! 6
     if (eglMakeCurrent(_display, _surface, _surface, _context) == EGL_FALSE)
     {
+        qDebug()<<"init ret:"<<false;
         return ret;
     }
 
     eglQuerySurface(_display, _surface, EGL_WIDTH,  &_width);
     eglQuerySurface(_display, _surface, EGL_HEIGHT, &_height);
+
     ret = 0;
 
     return  ret;
@@ -123,13 +134,6 @@ int WinGles2App::mainLoop(){
            break;
         }
 
-       // _event._sinceLastFrame  =   (float)_timestap.getElapsedSecond();
-       // _timestap.update();
-        /// 注意这里增加对定时器的支持
-       // _instance._timerMgr.update(_event._sinceLastFrame);
-        /**
-        *   有消息，处理消息，无消息，则进行渲染绘制
-        */
         if( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
         {
             TranslateMessage(&msg);
